@@ -147,7 +147,7 @@ Material:
     - _WorkflowMode: 1
     - _ZWrite: 1
     - _blend: 1
-    - _dissolveBlend: 0.15
+    - _dissolveBlend: 0.65
     - _dissolveTile: 0.09
     - _length: 1
     - _strength: 1

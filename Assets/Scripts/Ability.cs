@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
@@ -16,6 +15,8 @@ public class Ability : MonoBehaviour
     [SerializeField] float costPerSecond = 10f;
     [SerializeField] float recoveryPerSecond = 10f;
     [SerializeField] float staminaToStart = 30f;
+    [SerializeField] float speedModifier = 0.7f;
+    [SerializeField] float inWallSpeedModifier = 0.5f;
 
     [SerializeField] float pushOutAcceleration = 5f;
     [SerializeField] LayerMask excludeDeactivated = 0;
@@ -26,7 +27,7 @@ public class Ability : MonoBehaviour
     Collider playerCollider;
 
     float timer = 0f;
-    float stamina = 0f;
+    [SerializeField] float stamina = 0f;
 
     public static bool isDissolve = false;
     bool pushOut = false;
@@ -59,6 +60,9 @@ public class Ability : MonoBehaviour
         pushOut = false;
         timer = 0f;
         cc.excludeLayers = excludeActivated;
+
+        movement.SetModifier("ability",speedModifier);
+
         activated.Invoke();
         //
     }
@@ -69,6 +73,9 @@ public class Ability : MonoBehaviour
         timer = 0f;
         
         cc.excludeLayers = excludeDeactivated;
+
+        movement.RemoveModifier("ability");
+
         deactivated.Invoke();
         //
     }
@@ -78,6 +85,13 @@ public class Ability : MonoBehaviour
         
         if (isDissolve) stamina = Mathf.Clamp(stamina-costPerSecond*Time.deltaTime,0,maxStamina);
         else stamina = Mathf.Clamp(stamina+recoveryPerSecond*Time.deltaTime,0,maxStamina);
+
+        if (isDissolve && IsInsideWall()){
+            movement.SetModifier("inWalls",inWallSpeedModifier);
+        }
+        else {
+            movement.RemoveModifier("inWalls");
+        }
 
         if (isDissolve && (timer > maxDuration || stamina<=0 || entered.Count==0 && timer > waitDuration)){
             pushOut = true;
@@ -102,7 +116,9 @@ public class Ability : MonoBehaviour
                 bool isPenetrating = Physics.ComputePenetration(playerCollider,transform.position,transform.rotation,
                 nearest, nearest.transform.position, nearest.transform.rotation, out direction, out distance); 
                 //print(direction);
-                direction = Vector3.ProjectOnPlane(direction,Vector3.up).normalized;
+                Vector2 randomInCircle = Random.insideUnitCircle;
+                Vector3 random = new Vector3(randomInCircle.x,0,randomInCircle.y)*0.01f;
+                direction = Vector3.ProjectOnPlane(direction + random,Vector3.up).normalized;
                
                 //target = nearest.ClosestPoint(transform.position);
                 //direction = Vector3.ProjectOnPlane((transform.position - target)*(isIn?1:-1), Vector3.up).normalized;
@@ -111,6 +127,10 @@ public class Ability : MonoBehaviour
             }
             else DeactivateDissolve();
         }
+    }
+
+    bool IsInsideWall(){
+        return entered.Count>0;
     }
 
     void OnTriggerEnter(Collider collision){
