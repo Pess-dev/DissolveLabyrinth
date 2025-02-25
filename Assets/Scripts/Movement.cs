@@ -19,6 +19,10 @@ public class Movement : MonoBehaviour
     public void SetMoveDirection(Vector3 direction){
         moveDirection = Vector3.ClampMagnitude(direction,1);
     }
+    
+    public void AddFlatVelocity(Vector3 velocity){
+        flatVelocity += Vector3.ProjectOnPlane(velocity, Vector3.up);
+    }
 
     void Update()
     {

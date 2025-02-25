@@ -4,19 +4,28 @@ using UnityEngine;
 
 public class DissolveController : MonoBehaviour
 {
-    [SerializeField] float time = 1f;
+    [SerializeField] float duration = 1f;
+    [SerializeField] float fogDensityDeactivated = 0f;
+    [SerializeField] float fogDensityActivated = 0.5f;
     void Start()
     {
         Ability.activated.AddListener(Activate);
         Ability.deactivated.AddListener(Deactivate);
     }
 
-
     void Activate(){
-        DOTween.To(() => Shader.GetGlobalFloat("_value"), x => Shader.SetGlobalFloat("_value", x), 1, time);
+        DOTween.To(()=> Shader.GetGlobalVector("_MainParams").y, 
+            x => Shader.SetGlobalVector("_MainParams", 
+            new Vector4(Shader.GetGlobalVector("_MainParams").x, x, Shader.GetGlobalVector("_MainParams").z, Shader.GetGlobalVector("_MainParams").w)), 
+            fogDensityActivated, duration);
+        DOTween.To(() => Shader.GetGlobalFloat("_value"), x => Shader.SetGlobalFloat("_value", x), 1, duration);
     }
 
     void Deactivate(){
-        DOTween.To(() => Shader.GetGlobalFloat("_value"), x => Shader.SetGlobalFloat("_value", x), 0, time);
+         DOTween.To(()=> Shader.GetGlobalVector("_MainParams").y, 
+            x => Shader.SetGlobalVector("_MainParams", 
+            new Vector4(Shader.GetGlobalVector("_MainParams").x, x, Shader.GetGlobalVector("_MainParams").z, Shader.GetGlobalVector("_MainParams").w)), 
+            fogDensityDeactivated, duration);
+        DOTween.To(() => Shader.GetGlobalFloat("_value"), x => Shader.SetGlobalFloat("_value", x), 0, duration);
     }
 }

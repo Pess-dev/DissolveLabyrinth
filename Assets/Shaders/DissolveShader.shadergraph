@@ -1448,8 +1448,8 @@
     "m_ObjectId": "a071fd1bf7514628a1650f2f43041bad",
     "m_Title": "alpha",
     "m_Position": {
-        "x": -1057.0,
-        "y": 406.00006103515627
+        "x": -1057.0001220703125,
+        "y": 406.0
     }
 }
 
@@ -1787,7 +1787,7 @@
         "m_Id": "af29a1d14d324befaee70b5ead41793a"
     },
     "m_AllowMaterialOverride": false,
-    "m_SurfaceType": 1,
+    "m_SurfaceType": 0,
     "m_ZTestMode": 4,
     "m_ZWriteControl": 1,
     "m_AlphaMode": 0,

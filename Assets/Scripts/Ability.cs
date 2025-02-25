@@ -5,6 +5,7 @@ using UnityEngine.Events;
 using UnityEngine.InputSystem.Utilities;
 
 [RequireComponent(typeof(CharacterController))]
+[RequireComponent(typeof(Movement))]
 [RequireComponent(typeof(Collider))]
 public class Ability : MonoBehaviour
 {
@@ -16,18 +17,19 @@ public class Ability : MonoBehaviour
     [SerializeField] float recoveryPerSecond = 10f;
     [SerializeField] float staminaToStart = 30f;
 
-    [SerializeField] float pushOutSpeed = 5f;
+    [SerializeField] float pushOutAcceleration = 5f;
     [SerializeField] LayerMask excludeDeactivated = 0;
     [SerializeField] LayerMask excludeActivated = 0;
     
     CharacterController cc;
+    Movement movement;
     Collider playerCollider;
 
-    public float timer = 0f;
-    public float stamina = 0f;
+    float timer = 0f;
+    float stamina = 0f;
 
     public static bool isDissolve = false;
-    public bool pushOut = false;
+    bool pushOut = false;
 
     List<Collider> entered = new List<Collider>();
 
@@ -40,6 +42,7 @@ public class Ability : MonoBehaviour
         InputManager.ability.AddListener(ChangeDissolve);
         cc = GetComponent<CharacterController>();
         playerCollider = GetComponent<Collider>();
+        movement = GetComponent<Movement>();
     }
 
     void ChangeDissolve(bool value){
@@ -98,12 +101,13 @@ public class Ability : MonoBehaviour
                 bool isIn = nearest.bounds.Contains(transform.position);
                 bool isPenetrating = Physics.ComputePenetration(playerCollider,transform.position,transform.rotation,
                 nearest, nearest.transform.position, nearest.transform.rotation, out direction, out distance); 
-                print(direction);
+                //print(direction);
                 direction = Vector3.ProjectOnPlane(direction,Vector3.up).normalized;
                
                 //target = nearest.ClosestPoint(transform.position);
                 //direction = Vector3.ProjectOnPlane((transform.position - target)*(isIn?1:-1), Vector3.up).normalized;
-                cc.Move(direction*pushOutSpeed*Time.deltaTime);
+                //cc.Move(direction*pushOutSpeed*Time.deltaTime);
+                movement.AddFlatVelocity(direction*pushOutAcceleration*Time.deltaTime);
             }
             else DeactivateDissolve();
         }
