@@ -15,7 +15,9 @@ public class DissolveControllerEditor : Editor
         {
             dissolve.Activate();
             #if UNITY_EDITOR
-            Debug.Log("I cant run in editor! "+DateTime.UtcNow);
+            Shader.SetGlobalVector("_MainParams", new Vector4(Shader.GetGlobalVector("_MainParams").x,dissolve.fogDensityActivated,0,0));
+            Shader.SetGlobalFloat("_value",1);
+           // Debug.Log("I cant run in editor! "+DateTime.UtcNow);
             #endif
         }
 
@@ -23,7 +25,19 @@ public class DissolveControllerEditor : Editor
         {
             dissolve.Deactivate();
             #if UNITY_EDITOR
-            Debug.Log("I cant run in editor! "+DateTime.UtcNow);
+            Shader.SetGlobalVector("_MainParams", new Vector4(Shader.GetGlobalVector("_MainParams").x,dissolve.fogDensityDeactivated,0,0));
+            Shader.SetGlobalFloat("_value",0);
+            //Debug.Log("I cant run in editor! "+DateTime.UtcNow);
+            #endif
+        }
+
+        if (GUILayout.Button("Disable"))
+        {
+            dissolve.Deactivate();
+            #if UNITY_EDITOR
+            Shader.SetGlobalVector("_MainParams", new Vector4(Shader.GetGlobalVector("_MainParams").x,0,0,0));
+            Shader.SetGlobalFloat("_value",0);
+            //Debug.Log("I cant run in editor! "+DateTime.UtcNow);
             #endif
         }
     }

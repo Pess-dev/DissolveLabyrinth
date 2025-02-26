@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class WorldManager : MonoBehaviour
 {
-    [SerializeField] float chunkSize = 50f;
+    float chunkSize = 50f;
     List<Transform> chunks = new List<Transform>();
 
     Transform initial;
@@ -13,12 +13,16 @@ public class WorldManager : MonoBehaviour
     {
         currentChunk = transform.GetChild(0);
         chunks.Add(currentChunk);
-
+        chunkSize = MazeGenerator.instance.prefabSize*MazeGenerator.instance.height;
+        //MazeGenerator.mazeGenerated.AddListener(GenerateSurroundingChunks);
+        
         GenerateSurroundingChunks();
+        print(chunkSize);
     }
 
     void Update(){
         MoveInDelta(-PlayerController.deltaPosition);
+        UpdateChunks();
     }
 
     void MoveInDelta(Vector3 delta){

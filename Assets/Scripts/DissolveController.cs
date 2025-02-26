@@ -5,8 +5,8 @@ using UnityEngine;
 public class DissolveController : MonoBehaviour
 {
     [SerializeField] float duration = 1f;
-    [SerializeField] float fogDensityDeactivated = 0f;
-    [SerializeField] float fogDensityActivated = 0.5f;
+    [SerializeField] public float fogDensityDeactivated = 0f;
+    [SerializeField] public float fogDensityActivated = 0.5f;
 
     void Start()
     {
