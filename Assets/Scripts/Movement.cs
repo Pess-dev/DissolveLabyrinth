@@ -14,7 +14,13 @@ public class Movement : MonoBehaviour
     Vector3 moveDirection = Vector3.zero;
     Vector3 flatVelocity = Vector3.zero;
 
+    Vector3 oldPosition;
+    public Vector3 deltaPosition {get; private set;} = Vector3.zero;
+    
+
     Dictionary<string,float> modifiers = new Dictionary<string, float>();
+
+
 
     void Start()
     {
@@ -63,6 +69,13 @@ public class Movement : MonoBehaviour
         flatVelocity = Vector3.ClampMagnitude(flatVelocity,modifiedSpeed);
         if (moveDirection.magnitude < 0.1f) 
             flatVelocity = Vector3.ClampMagnitude(flatVelocity, Mathf.Clamp(flatVelocity.magnitude-modifiedAcceleration*Time.deltaTime,0,modifiedSpeed));
+        
+        Vector3 pos = transform.position;
         cc.Move((flatVelocity - Vector3.up*2)*Time.deltaTime);
+        Vector3 after = transform.position;
+        deltaPosition = transform.position - pos;
+        
+        transform.position = Vector3.Project(transform.position, Vector3.up); 
+        print(pos+" "+after+" "+transform.position);
     }
 }

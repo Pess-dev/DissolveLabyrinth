@@ -58,7 +58,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _DissolvePattern:
-        m_Texture: {fileID: 2800000, guid: 16ab6027bbb4ad24ea8b62faf67651dc, type: 3}
+        m_Texture: {fileID: 2800000, guid: 775fb24f046a5ae4593a9f582c2e510e, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _EmissionMap:
