@@ -75,7 +75,7 @@ public class Movement : MonoBehaviour
         Vector3 after = transform.position;
         deltaPosition = transform.position - pos;
         
-        transform.position = Vector3.Project(transform.position, Vector3.up); 
+        //transform.position = Vector3.Project(transform.position, Vector3.up); 
        // print(pos+" "+after+" "+transform.position);
     }
 }

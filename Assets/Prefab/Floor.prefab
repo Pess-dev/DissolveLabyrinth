@@ -11,12 +11,13 @@ GameObject:
   - component: {fileID: 6899058147052131641}
   - component: {fileID: 3045834058795461662}
   - component: {fileID: 8349216191985118204}
+  - component: {fileID: -1152465980636830530}
   m_Layer: 0
   m_Name: Floor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &6899058147052131641
 Transform:
@@ -101,7 +102,7 @@ VisualEffect:
       - m_Value: 0.08
         m_Name: Size
         m_Overridden: 1
-      - m_Value: 15
+      - m_Value: 1
         m_Name: Distance
         m_Overridden: 1
     m_Vector2f:
@@ -145,6 +146,18 @@ VisualEffect:
         m_Overridden: 1
     m_Bool:
       m_Array: []
+--- !u!114 &-1152465980636830530
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3323630791357088525}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d4a0cf4b2416a84448e35c52ea6c8c64, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8192196104710024711
 GameObject:
   m_ObjectHideFlags: 0
@@ -162,7 +175,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &9093919185050991328
 Transform:
@@ -174,7 +187,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.3, y: 6, z: 0.3}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6899058147052131641}
@@ -186,7 +199,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8192196104710024711}
-  m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
+  m_Mesh: {fileID: -3169986393032714919, guid: 6742f0027ee5e1a43b03893c36e97ce2, type: 3}
 --- !u!23 &5046508951473744636
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -210,7 +223,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: d3cd48f12c675c84fbbcb1c2fe73e50f, type: 2}
+  - {fileID: 2100000, guid: 5f0959156cd74674badf46161c47ed77, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -253,4 +266,4 @@ MeshCollider:
   serializedVersion: 5
   m_Convex: 0
   m_CookingOptions: 30
-  m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
+  m_Mesh: {fileID: -3169986393032714919, guid: 6742f0027ee5e1a43b03893c36e97ce2, type: 3}

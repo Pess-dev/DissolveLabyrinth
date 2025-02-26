@@ -14,11 +14,6 @@ public class MazeGenerator : MonoBehaviour
 
     public static UnityEvent mazeGenerated = new UnityEvent();
     
-    //public string savePath = "maze.json";
-
-    // public static float GetMazeSize() {
-        
-    // }
 
     public GameObject wallPrefab; // Префаб стены
     public GameObject floorPrefab; // Префаб пола
@@ -58,11 +53,11 @@ public class MazeGenerator : MonoBehaviour
         }
 
         // Создаем пол
-        for (int x = 0; x < width; x++)
+        for (int x = 0; x < width+1; x++)
         {
-            for (int y = 0; y < height; y++)
+            for (int y = 0; y < height+1; y++)
             {
-                Vector3 position = new Vector3(x, 0, y)*prefabSize;
+                Vector3 position = new Vector3(x- width/2, 0, y - height/2)*prefabSize;
                 Instantiate(floorPrefab, position, Quaternion.identity, mazeParent);
             }
         }
@@ -77,32 +72,33 @@ public class MazeGenerator : MonoBehaviour
                 // Северная стена
                 if (grid[x, y].north)
                 {
-                    Vector3 wallPosition = cellPosition + new Vector3(0, 0, 0.5f)*prefabSize;
+                    Vector3 wallPosition = cellPosition + new Vector3(0- width/2, 0, 0.5f- height/2)*prefabSize;
                     Instantiate(wallPrefab, wallPosition, Quaternion.identity, mazeParent);
                 }
 
                 // Южная стена
                 if (grid[x, y].south)
                 {
-                    Vector3 wallPosition = cellPosition + new Vector3(0, 0, -0.5f)*prefabSize;
+                    Vector3 wallPosition = cellPosition + new Vector3(0- width/2, 0, -0.5f- height/2)*prefabSize;
                     Instantiate(wallPrefab, wallPosition, Quaternion.identity, mazeParent);
                 }
 
                 // Восточная стена
                 if (grid[x, y].east)
                 {
-                    Vector3 wallPosition = cellPosition + new Vector3(0.5f, 0, 0)*prefabSize;
+                    Vector3 wallPosition = cellPosition + new Vector3(0.5f- width/2, 0, - height/2)*prefabSize;
                     Instantiate(wallPrefab, wallPosition, Quaternion.Euler(0, 90, 0), mazeParent);
                 }
 
                 // Западная стена
                 if (grid[x, y].west)
                 {
-                    Vector3 wallPosition = cellPosition + new Vector3(-0.5f, 0, 0)*prefabSize;
+                    Vector3 wallPosition = cellPosition + new Vector3(-0.5f- width/2, 0, 0- height/2)*prefabSize;
                     Instantiate(wallPrefab, wallPosition, Quaternion.Euler(0, 90, 0), mazeParent);
                 }
             }
         }
+        //mazeParent.position = new Vector3(-0.5f, 0, -0.5f)*prefabSize*width;
         mazeGenerated.Invoke();
     }
 
@@ -195,49 +191,4 @@ public class MazeGenerator : MonoBehaviour
         }
     }
 
-    // void SaveMaze()
-    // {
-    //     MazeData data = new MazeData
-    //     {
-    //         width = width,
-    //         height = height,
-    //         cells = new CellData[width * height]
-    //     };
-
-    //     for (int y = 0; y < height; y++)
-    //     {
-    //         for (int x = 0; x < width; x++)
-    //         {
-    //             int index = y * width + x;
-    //             data.cells[index] = new CellData
-    //             {
-    //                 north = grid[x, y].north,
-    //                 south = grid[x, y].south,
-    //                 east = grid[x, y].east,
-    //                 west = grid[x, y].west
-    //             };
-    //         }
-    //     }
-
-    //     string json = JsonUtility.ToJson(data, true);
-    //     File.WriteAllText(Application.dataPath + "/" + savePath, json);
-    //     Debug.Log($"Maze saved to: {Application.dataPath}/{savePath}");
-    // }
-}
-
-[System.Serializable]
-public class CellData
-{
-    public bool north;
-    public bool south;
-    public bool east;
-    public bool west;
-}
-
-[System.Serializable]
-public class MazeData
-{
-    public int width;
-    public int height;
-    public CellData[] cells;
 }
