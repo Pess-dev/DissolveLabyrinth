@@ -515,7 +515,7 @@ GameObject:
   - component: {fileID: 1924454338735374481}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Movable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -586,7 +586,7 @@ CharacterController:
   m_Enabled: 1
   serializedVersion: 3
   m_Height: 2
-  m_Radius: 0.5
+  m_Radius: 0.3
   m_SlopeLimit: 45
   m_StepOffset: 0.3
   m_SkinWidth: 0.5
@@ -663,6 +663,7 @@ MonoBehaviour:
   staminaToStart: 30
   speedModifier: 0.8
   inWallSpeedModifier: 0.5
+  abilityMinSpeed: 1
   pushOutAcceleration: 500
   excludeDeactivated:
     serializedVersion: 2
