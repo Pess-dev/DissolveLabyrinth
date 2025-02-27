@@ -17,12 +17,13 @@ public class MazeGenerator : MonoBehaviour
     public GameObject largePillarPrefab;
     public GameObject floorPrefab;
     public List<GameObject> floorSpecialPrefabs;
-    public List<GameObject> objectsPrefabs;
+    public List<GameObject> furniturePrefabs;
     public Transform mazeParent;
 
     public float largePillarChance = 0.1f;
     public float specialWallChance = 0.3f;
     public float specialFloorChance = 0.1f;
+    public float objectChance = 0.1f;
 
     private Cell[,] grid;
 
@@ -73,7 +74,7 @@ public class MazeGenerator : MonoBehaviour
             }
         }
 
-        GameObject wallRandomed = wallPrefab;
+        GameObject wallRandomed;
 
 
         // Внутренние горизонтальные стены (северные)
@@ -115,6 +116,45 @@ public class MazeGenerator : MonoBehaviour
                 }
             }
         }
+
+        
+
+        // // Статичные предметы
+        // for (int x = 0; x < mazeSize - 1; x++)
+        // {
+        //     for (int y = 0; y < mazeSize-1; y++)
+        //     {
+        //         GameObject furniturePrefab;
+        //         Vector3 furniturePosition = new Vector3(
+        //                 (x - mazeSize / 2f) * prefabSize,
+        //                 0,
+        //                 (y - mazeSize / 2f) * prefabSize
+        //         );
+        //         if (grid[x, y].north && Random.value<=objectChance){
+        //             furniturePosition += new Vector3(0.5f,0,1f)*prefabSize;
+        //             furniturePrefab = furniturePrefabs[Random.Range(0, furniturePrefabs.Count)];
+        //             Instantiate(furniturePrefab, furniturePosition, Quaternion.Euler(0, 180, 0), mazeParent);
+        //         }
+        //         if (grid[x, y].south && Random.value<=objectChance)
+        //         {
+        //             furniturePosition += new Vector3(-0.5f,0,-1f)*prefabSize;
+        //             furniturePrefab = furniturePrefabs[Random.Range(0, furniturePrefabs.Count)];
+        //             Instantiate(furniturePrefab, furniturePosition, Quaternion.Euler(0, 0, 0), mazeParent);
+        //         }
+        //         // if (grid[x, y].east && Random.value<=objectChance)
+        //         // {
+        //         //     furniturePosition += new Vector3(0.5f,0,0)*prefabSize;
+        //         //     furniturePrefab = furniturePrefabs[Random.Range(0, furniturePrefabs.Count)];
+        //         //     Instantiate(furniturePrefab, furniturePosition, Quaternion.Euler(0, 270, 0), mazeParent);
+        //         // }
+        //         // if (grid[x, y].west && Random.value<=objectChance)
+        //         // {
+        //         //     furniturePosition += new Vector3(-0.5f,0,0)*prefabSize;
+        //         //     furniturePrefab = furniturePrefabs[Random.Range(0, furniturePrefabs.Count)];
+        //         //     Instantiate(furniturePrefab, furniturePosition, Quaternion.Euler(0, 0, 0), mazeParent);
+        //         // }
+        //     }
+        // }
 
         SpawnPillars();
 

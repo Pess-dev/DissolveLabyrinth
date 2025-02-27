@@ -12,8 +12,6 @@ public class PlayerController : MonoBehaviour
     public static Vector3 position {get; private set;} = Vector3.zero;
     public static PlayerController instance {get; private set;}
 
-    
-    
     void Awake(){
         instance = this;
     }

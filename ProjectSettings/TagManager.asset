@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 3
   tags:
   - Movable
+  - Spawner
   layers:
   - Default
   - TransparentFX

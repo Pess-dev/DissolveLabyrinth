@@ -2,16 +2,17 @@ using System.Collections.Generic;
 using System.Linq;
 using Unity.AI.Navigation;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class WorldManager : MonoBehaviour
 {
     float chunkSize;
-    List<Transform> chunkPool = new List<Transform>();
+    static List<Transform> chunkPool = new List<Transform>();
     Transform cornerChunk;
     //Transform currentChunk = null;
     bool ready = false;
- 
 
+    public static UnityEvent chunksCreated = new UnityEvent();
 
     void Awake()
     {
@@ -21,7 +22,7 @@ public class WorldManager : MonoBehaviour
 
     void InitializeChunkPool()
     {
-        cornerChunk = transform.GetChild(0);
+        cornerChunk = transform.Find("Chunk");
         chunkPool.Add(cornerChunk);
         
         for (int i = 0; i < 3; i++)
@@ -30,7 +31,9 @@ public class WorldManager : MonoBehaviour
             chunkPool.Add(chunk.transform);
         }
         PositionAllChunks();
+        
         ready = true;
+        chunksCreated.Invoke();
     }
 
     void Update()
@@ -123,5 +126,20 @@ public class WorldManager : MonoBehaviour
                 index++;
             }
         }
+    }
+
+    public static Vector3 GetNearestPoint(Vector3 pos){
+        Vector3 nearest = pos;
+        Vector3 playerPos = PlayerController.position;
+
+        Transform nativeChunk = chunkPool.OrderBy((x)=>Vector3.Distance(x.position,pos)).First();
+        Vector3 offset = pos - nativeChunk.position;
+        Transform targetChunk = chunkPool.OrderBy((x)=>Vector3.Distance(x.position+offset,playerPos)).First();
+        
+        if (nativeChunk == targetChunk) return pos;
+
+        nearest = targetChunk.position + offset;
+
+        return nearest;
     }
 }
