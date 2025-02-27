@@ -1,23 +1,27 @@
 using UnityEngine;
 using System.Collections.Generic;
-using System.IO;
-using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine.Events;
+using Unity.Collections;
 
 public class MazeGenerator : MonoBehaviour
 {
-    public int width = 10;
-    public int height = 10;
+    public int mazeSize = 10;
     public float prefabSize = 3f;
 
     public static MazeGenerator instance;
-
     public static UnityEvent mazeGenerated = new UnityEvent();
-    
 
-    public GameObject wallPrefab; // Префаб стены
-    public GameObject floorPrefab; // Префаб пола
-    public Transform mazeParent; // Родительский объект для лабиринта
+    public GameObject wallPrefab;
+    public List<GameObject> wallSpecialPrefab;
+    public GameObject pillarPrefab;
+    public GameObject largePillarPrefab;
+    public GameObject floorPrefab;
+    public List<GameObject> floorSpecialPrefab;
+    public Transform mazeParent;
+
+    public float largePillarChance = 0.1f;
+    public float specialWallChance = 0.3f;
+    public float specialFloorChance = 0.1f;
 
     private Cell[,] grid;
 
@@ -31,76 +35,173 @@ public class MazeGenerator : MonoBehaviour
         public bool visited = false;
     }
 
-    void Awake(){
+    void Awake()
+    {
         instance = this;
     }
 
     void Start()
     {
         GenerateMaze();
-        //SaveMaze();
         SpawnMaze();
-
-        
     }
 
     void SpawnMaze()
     {
         if (wallPrefab == null || floorPrefab == null || mazeParent == null)
         {
-            Debug.LogError("Префабы стен, пола или родительский объект не назначены!");
+            Debug.LogError("Префабы или родительский объект не назначены!");
             return;
         }
 
-        // Создаем пол
-        for (int x = 0; x < width+1; x++)
+        // Создание пола
+        for (int x = 0; x < mazeSize; x++)
         {
-            for (int y = 0; y < height+1; y++)
+            for (int y = 0; y < mazeSize; y++)
             {
-                Vector3 position = new Vector3(x- width/2, 0, y - height/2)*prefabSize;
+                Vector3 position = new Vector3(
+                    x - mazeSize / 2f + 0.5f,
+                    0,
+                    y - mazeSize / 2f + 0.5f
+                ) * prefabSize;
                 Instantiate(floorPrefab, position, Quaternion.identity, mazeParent);
             }
         }
 
-        // Создаем стены
-        for (int x = 0; x < width; x++)
-        {
-            for (int y = 0; y < height; y++)
-            {
-                Vector3 cellPosition = new Vector3(x, 0, y)*prefabSize;
+        GameObject wallRandomed = wallPrefab;
+        if (Random.value<= specialWallChance) wallRandomed = wallSpecialPrefab[Random.Range(0, wallSpecialPrefab.Count)];
 
-                // Северная стена
+        Vector3 offset = Vector3.zero;//new Vector3(1,0,1)*prefabSize/2;
+
+        // Внутренние горизонтальные стены (северные)
+        for (int x = 0; x < mazeSize; x++)
+        {
+            for (int y = 0; y < mazeSize - 1; y++)
+            {
                 if (grid[x, y].north)
                 {
-                    Vector3 wallPosition = cellPosition + new Vector3(0- width/2, 0, 0.5f- height/2)*prefabSize;
-                    Instantiate(wallPrefab, wallPosition, Quaternion.identity, mazeParent);
-                }
-
-                // Южная стена
-                if (grid[x, y].south)
-                {
-                    Vector3 wallPosition = cellPosition + new Vector3(0- width/2, 0, -0.5f- height/2)*prefabSize;
-                    Instantiate(wallPrefab, wallPosition, Quaternion.identity, mazeParent);
-                }
-
-                // Восточная стена
-                if (grid[x, y].east)
-                {
-                    Vector3 wallPosition = cellPosition + new Vector3(0.5f- width/2, 0, - height/2)*prefabSize;
-                    Instantiate(wallPrefab, wallPosition, Quaternion.Euler(0, 90, 0), mazeParent);
-                }
-
-                // Западная стена
-                if (grid[x, y].west)
-                {
-                    Vector3 wallPosition = cellPosition + new Vector3(-0.5f- width/2, 0, 0- height/2)*prefabSize;
-                    Instantiate(wallPrefab, wallPosition, Quaternion.Euler(0, 90, 0), mazeParent);
+                    Vector3 wallPosition = new Vector3(
+                        (x - mazeSize / 2f + 0.5f) * prefabSize,
+                        0,
+                        (y - mazeSize / 2f + 1f) * prefabSize
+                    );
+                    Instantiate(wallRandomed, wallPosition+offset, Quaternion.Euler(0, 90, 0), mazeParent);
                 }
             }
         }
-        //mazeParent.position = new Vector3(-0.5f, 0, -0.5f)*prefabSize*width;
+
+        // // Внешняя верхняя стена
+        // for (int x = 0; x < mazeSize; x++)
+        // {
+        //     if (grid[x, mazeSize - 1].north)
+        //     {
+        //         Vector3 wallPosition = new Vector3(
+        //             (x - mazeSize / 2f + 0.5f) * prefabSize,
+        //             0,
+        //             (mazeSize - mazeSize / 2f) * prefabSize
+        //         );
+        //         Instantiate(wallPrefab, wallPosition+offset, Quaternion.Euler(0, 90, 0), mazeParent);
+        //     }
+        // }
+
+        // // Внешняя нижняя стена
+        // for (int x = 0; x < mazeSize; x++)
+        // {
+        //     if (grid[x, 0].south)
+        //     {
+        //         Vector3 wallPosition = new Vector3(
+        //             (x - mazeSize / 2f + 0.5f) * prefabSize,
+        //             0,
+        //             (-mazeSize / 2f) * prefabSize
+        //         );
+        //         Instantiate(wallPrefab, wallPosition+offset, Quaternion.Euler(0, 90, 0), mazeParent);
+        //     }
+        // }
+
+        // Внутренние вертикальные стены (восточные)
+        for (int x = 0; x < mazeSize - 1; x++)
+        {
+            for (int y = 0; y < mazeSize; y++)
+            {
+                if (grid[x, y].east)
+                {
+                    Vector3 wallPosition = new Vector3(
+                        (x - mazeSize / 2f + 1f) * prefabSize,
+                        0,
+                        (y - mazeSize / 2f + 0.5f) * prefabSize
+                    );
+                    Instantiate(wallPrefab, wallPosition+offset, Quaternion.identity, mazeParent);
+                }
+            }
+        }
+
+        // // Внешняя правая стена
+        // for (int y = 0; y < mazeSize; y++)
+        // {
+        //     if (grid[mazeSize - 1, y].east)
+        //     {
+        //         Vector3 wallPosition = new Vector3(
+        //             (mazeSize - mazeSize / 2f) * prefabSize,
+        //             0,
+        //             (y - mazeSize / 2f + 0.5f) * prefabSize
+        //         );
+        //         Instantiate(wallPrefab, wallPosition+offset, Quaternion.identity, mazeParent);
+        //     }
+        // }
+
+        // // Внешняя левая стена
+        // for (int y = 0; y < mazeSize; y++)
+        // {
+        //     if (grid[0, y].west)
+        //     {
+        //         Vector3 wallPosition = new Vector3(
+        //             (-mazeSize / 2f) * prefabSize,
+        //             0,
+        //             (y - mazeSize / 2f + 0.5f) * prefabSize
+        //         );
+        //         Instantiate(wallPrefab, wallPosition+offset, Quaternion.identity, mazeParent);
+        //     }
+        // }
+        SpawnPillars();
+
         mazeGenerated.Invoke();
     }
+
+void SpawnPillars()
+{
+    if (pillarPrefab == null||largePillarPrefab==null)
+    {
+        Debug.LogError("Префаб столба не назначен!");
+        return;
+    }
+
+    for (int x = 0; x < mazeSize; x++)
+    {
+        for (int y = 0; y < mazeSize; y++)
+        {
+            Vector3 pillarPosition = new Vector3(
+                    (x - mazeSize / 2f) * prefabSize,
+                    0,
+                    (y - mazeSize / 2f) * prefabSize
+                );
+            
+            if (Random.value<=largePillarChance){   
+                Instantiate(largePillarPrefab, pillarPosition, Quaternion.identity, mazeParent);
+                continue;
+            }
+
+           // if (!((grid[x,y].east||grid[x,y].west||grid[x,y].north||grid[x,y].south)&&(x==0 &&!grid[x,y].south||y==0 &&!grid[x,y].west)))
+            if ((x!=0 || grid[x,y].south)&&(y!=0 || grid[x,y].west)&&(y!=0||x!=0|| !(grid[x,y].west && grid[x,y].south)))
+            {
+                
+                GameObject pillar = Instantiate(pillarPrefab, pillarPosition, Quaternion.identity, mazeParent);
+
+                pillar.name+=""+grid[x,y].north+grid[x,y].south+grid[x,y].east+grid[x,y].west;
+            }
+
+        }
+    }
+}
 
     void GenerateMaze()
     {
@@ -127,14 +228,21 @@ public class MazeGenerator : MonoBehaviour
                 stack.Pop();
             }
         }
+
+        // for (int x = 0; x < mazeSize; x++)
+        // for (int y = 0; y < mazeSize; y++){
+        //     if (x == 0){
+        //         grid
+        //     }
+        // }
     }
 
     void InitializeGrid()
     {
-        grid = new Cell[width, height];
-        for (int x = 0; x < width; x++)
+        grid = new Cell[mazeSize+1, mazeSize+1];
+        for (int x = 0; x < mazeSize+1; x++)
         {
-            for (int y = 0; y < height; y++)
+            for (int y = 0; y < mazeSize+1; y++)
             {
                 grid[x, y] = new Cell();
             }
@@ -145,19 +253,15 @@ public class MazeGenerator : MonoBehaviour
     {
         List<Vector2Int> neighbors = new List<Vector2Int>();
 
-        // Check North
-        if (cell.y < height - 1 && !grid[cell.x, cell.y + 1].visited)
+        if (cell.y <= mazeSize - 1 && !grid[cell.x, cell.y + 1].visited)
             neighbors.Add(new Vector2Int(cell.x, cell.y + 1));
 
-        // Check South
         if (cell.y > 0 && !grid[cell.x, cell.y - 1].visited)
             neighbors.Add(new Vector2Int(cell.x, cell.y - 1));
 
-        // Check East
-        if (cell.x < width - 1 && !grid[cell.x + 1, cell.y].visited)
+        if (cell.x <= mazeSize - 1 && !grid[cell.x + 1, cell.y].visited)
             neighbors.Add(new Vector2Int(cell.x + 1, cell.y));
 
-        // Check West
         if (cell.x > 0 && !grid[cell.x - 1, cell.y].visited)
             neighbors.Add(new Vector2Int(cell.x - 1, cell.y));
 
@@ -190,5 +294,4 @@ public class MazeGenerator : MonoBehaviour
             grid[next.x, next.y].north = false;
         }
     }
-
 }

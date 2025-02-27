@@ -17,6 +17,7 @@ public class Ability : MonoBehaviour
     [SerializeField] float staminaToStart = 30f;
     [SerializeField] float speedModifier = 0.7f;
     [SerializeField] float inWallSpeedModifier = 0.5f;
+    [SerializeField] float abilityMinSpeed = 1f;
 
     [SerializeField] float pushOutAcceleration = 5f;
     [SerializeField] LayerMask excludeDeactivated = 0;
@@ -88,9 +89,11 @@ public class Ability : MonoBehaviour
 
         if (isDissolve && IsInsideWall()){
             movement.SetModifier("inWalls",inWallSpeedModifier);
+            movement.SetMinimumSpeed(abilityMinSpeed);
         }
         else {
             movement.RemoveModifier("inWalls");
+            movement.ResetMinimumSpeed();
         }
 
         if (isDissolve && (timer > maxDuration || stamina<=0 || entered.Count==0 && timer > waitDuration)){
@@ -118,8 +121,8 @@ public class Ability : MonoBehaviour
                 //nearest.ClosestPoint();
                 //print(direction);
                 Vector2 randomInCircle = Random.insideUnitCircle;
-                Vector3 random = new Vector3(randomInCircle.x,0,randomInCircle.y)*0.01f;
-                direction = Vector3.ProjectOnPlane(direction + random,Vector3.up).normalized;
+                //Vector3 random = new Vector3(randomInCircle.x,0,randomInCircle.y)*0.01f;
+                //direction = Vector3.ProjectOnPlane(direction + random,Vector3.up).normalized;
                
                 //target = nearest.ClosestPoint(transform.position);
                 //direction = Vector3.ProjectOnPlane((transform.position - target)*(isIn?1:-1), Vector3.up).normalized;

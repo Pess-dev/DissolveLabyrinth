@@ -9,6 +9,8 @@ public class Movement : MonoBehaviour
     [SerializeField] float acceleration = 5f;
 
 
+    float minimumSpeed = 0f;
+
     CharacterController cc;
 
     Vector3 moveDirection = Vector3.zero;
@@ -43,13 +45,19 @@ public class Movement : MonoBehaviour
         modifiers.Clear();
     }
 
+    public void SetMinimumSpeed(float value){
+        minimumSpeed = value;
+    }
+    public void ResetMinimumSpeed(){
+        minimumSpeed = 0f;
+    }
+
 
     public void AddFlatVelocity(Vector3 velocity){
         flatVelocity += Vector3.ProjectOnPlane(velocity, Vector3.up);
     }
 
-    void Update()
-    {
+    void Update(){
         Move();
     }
 
@@ -67,6 +75,7 @@ public class Movement : MonoBehaviour
 
         flatVelocity += moveDirection*modifiedAcceleration*Time.deltaTime;
         flatVelocity = Vector3.ClampMagnitude(flatVelocity,modifiedSpeed);
+        if (flatVelocity.magnitude<minimumSpeed&&flatVelocity.magnitude!=0) flatVelocity = flatVelocity.normalized*minimumSpeed;
         if (moveDirection.magnitude < 0.1f) 
             flatVelocity = Vector3.ClampMagnitude(flatVelocity, Mathf.Clamp(flatVelocity.magnitude-modifiedAcceleration*Time.deltaTime,0,modifiedSpeed));
         

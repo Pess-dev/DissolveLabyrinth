@@ -13,7 +13,7 @@ public class WorldManager : MonoBehaviour
 
     void Awake()
     {
-        chunkSize = MazeGenerator.instance.prefabSize * MazeGenerator.instance.width;
+        chunkSize = MazeGenerator.instance.prefabSize * MazeGenerator.instance.mazeSize;
         MazeGenerator.mazeGenerated.AddListener(InitializeChunkPool);
     }
 
@@ -80,7 +80,7 @@ public class WorldManager : MonoBehaviour
         float threshold = chunkSize / 2;
         Vector3 offset = playerPos - chunkCenter;
         offset -= new Vector3(1,0,1)* chunkSize / 2;
-        print(offset+" "+chunkCenter + " "+ playerPos+" "+threshold);
+        //print(offset+" "+chunkCenter + " "+ playerPos+" "+threshold);
         
         int moveX = Mathf.Abs(offset.x) > threshold ? (int)Mathf.Sign(offset.x) : 0;
         int moveZ = Mathf.Abs(offset.z) > threshold ? (int)Mathf.Sign(offset.z) : 0;
