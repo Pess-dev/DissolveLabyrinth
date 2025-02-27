@@ -41,7 +41,7 @@ public class Movement : MonoBehaviour
         modifiers.Remove(name);
     }
 
-    public void ResetModifier(){
+    public void ResetModifiers(){
         modifiers.Clear();
     }
 
@@ -76,6 +76,8 @@ public class Movement : MonoBehaviour
         flatVelocity += moveDirection*modifiedAcceleration*Time.deltaTime;
         flatVelocity = Vector3.ClampMagnitude(flatVelocity,modifiedSpeed);
         if (flatVelocity.magnitude<minimumSpeed&&flatVelocity.magnitude!=0) flatVelocity = flatVelocity.normalized*minimumSpeed;
+        else 
+        if (flatVelocity.magnitude==0&&flatVelocity.magnitude<minimumSpeed) flatVelocity = transform.forward;
         if (moveDirection.magnitude < 0.1f) 
             flatVelocity = Vector3.ClampMagnitude(flatVelocity, Mathf.Clamp(flatVelocity.magnitude-modifiedAcceleration*Time.deltaTime,0,modifiedSpeed));
         

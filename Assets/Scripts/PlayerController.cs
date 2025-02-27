@@ -10,10 +10,12 @@ public class PlayerController : MonoBehaviour
 
     public static Vector3 deltaPosition {get; private set;} = Vector3.zero;
     public static Vector3 position {get; private set;} = Vector3.zero;
+    public static PlayerController instance {get; private set;}
 
     
     
     void Awake(){
+        instance = this;
     }
 
     void Start(){

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Unity.AI.Navigation;
 using UnityEngine;
 
 public class WorldManager : MonoBehaviour
@@ -10,6 +11,7 @@ public class WorldManager : MonoBehaviour
     //Transform currentChunk = null;
     bool ready = false;
  
+
 
     void Awake()
     {
