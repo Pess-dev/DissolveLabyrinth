@@ -40,12 +40,18 @@ public class MazeGenerator : MonoBehaviour
     void Awake()
     {
         instance = this;
+        //mazeGenerated = new UnityEvent();
+    }
+
+    void OnDestroy(){
+        mazeGenerated.RemoveAllListeners();
     }
 
     void Start()
     {
         GenerateMaze();
         SpawnMaze();
+
     }
 
     void SpawnMaze()

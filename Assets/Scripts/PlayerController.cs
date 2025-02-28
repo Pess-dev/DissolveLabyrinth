@@ -12,27 +12,47 @@ public class PlayerController : MonoBehaviour
     public static Vector3 position {get; private set;} = Vector3.zero;
     public static PlayerController instance {get; private set;}
 
+    bool isControllable = true;
+
     void Awake(){
         instance = this;
+
     }
 
     void Start(){
         movement = GetComponent<Movement>();
         //cameraTransform = Camera.main.transform;
         transform.position = Vector3.Project(transform.position, Vector3.up); 
+        if (GameManager.gameState == GameManager.GameState.Play)
+            EnableControls();
+        else 
+            DisableControls();
+        GameManager.instance.changedToPlay.AddListener(EnableControls);
+        GameManager.instance.changedToPause.AddListener(DisableControls);
     }
 
     void Update()
     {
+        if (!isControllable) 
+            return;
+
         deltaPosition = movement.deltaPosition;
         position = transform.position;
         movement.SetMoveDirection(InputManager.moveDirection);
         
-        transform.Rotate(Vector3.up * InputManager.lookDirection.x);
+        cameraTransform.Rotate(Vector3.up * InputManager.lookDirection.x);
         
         verticalLookRotation -= InputManager.lookDirection.y; 
         verticalLookRotation = Mathf.Clamp(verticalLookRotation, -cameraMaxAngle, cameraMaxAngle);
-        cameraTransform.localEulerAngles = new Vector3(verticalLookRotation, 0, 0);
+        cameraTransform.localEulerAngles = new Vector3(verticalLookRotation, cameraTransform.localEulerAngles.y, 0);
 
+    }
+
+    void DisableControls(){
+        isControllable = false;
+    }
+    
+    void EnableControls(){
+        isControllable = true;
     }
 }

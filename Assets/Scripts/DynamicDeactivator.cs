@@ -3,8 +3,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.VFX;
 
-public class DynamicDeactivator : MonoBehaviour
-{
+public class DynamicDeactivator : MonoBehaviour{
     [SerializeField] float radius;
     [SerializeField] float abilityRadius;
     [SerializeField] float chunkSize = 10f;
@@ -13,9 +12,9 @@ public class DynamicDeactivator : MonoBehaviour
 
     [SerializeField] string deactivateTag = "visual"; 
 
-    void Awake()
-    {
-        MazeGenerator.mazeGenerated.AddListener(Initialize);
+    void Awake(){
+        //MazeGenerator.instance.mazeGenerated.AddListener(Initialize);
+        WorldManager.chunksCreated.AddListener(Initialize);
     }
 
     void LateUpdate(){   
@@ -59,9 +58,6 @@ public class DynamicDeactivator : MonoBehaviour
                 }
             }
         }
-
         //preVisuals = preVisuals.OrderBy((x)=>Vector3.Distance(x.transform.position,PlayerController.position)).ToList();
-
-
     }
 }

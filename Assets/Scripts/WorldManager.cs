@@ -6,6 +6,7 @@ using UnityEngine.Events;
 
 public class WorldManager : MonoBehaviour
 {
+    public static WorldManager instance; 
     float chunkSize;
     static List<Transform> chunkPool = new List<Transform>();
     Transform cornerChunk;
@@ -16,10 +17,16 @@ public class WorldManager : MonoBehaviour
 
     public static UnityEvent chunksCreated = new UnityEvent();
 
-    void Awake()
-    {
+    void Awake(){
+        offset = Vector3.zero;
+        instance = this;
         chunkSize = MazeGenerator.instance.prefabSize * MazeGenerator.instance.mazeSize;
         MazeGenerator.mazeGenerated.AddListener(InitializeChunkPool);
+    }
+
+    void OnDestroy(){
+        chunksCreated.RemoveAllListeners();
+        chunkPool = new List<Transform>();
     }
 
     void InitializeChunkPool()

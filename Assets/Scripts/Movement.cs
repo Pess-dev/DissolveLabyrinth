@@ -7,6 +7,7 @@ public class Movement : MonoBehaviour
 {
     [SerializeField] float speed = 5f;
     [SerializeField] float acceleration = 5f;
+    [SerializeField] float rotateSpeed = 10f;
 
 
     float minimumSpeed = 0f;
@@ -14,6 +15,7 @@ public class Movement : MonoBehaviour
     CharacterController cc;
 
     Vector3 moveDirection = Vector3.zero;
+    Vector3 lookDirection = Vector3.forward;
     Vector3 flatVelocity = Vector3.zero;
 
     Vector3 oldPosition;
@@ -31,6 +33,11 @@ public class Movement : MonoBehaviour
 
     public void SetMoveDirection(Vector3 direction){
         moveDirection = Vector3.ClampMagnitude(direction,1);
+    }
+
+    public void SetLookDirection(Vector3 direction){
+        lookDirection = Vector3.ClampMagnitude(direction,1);
+        lookDirection = Vector3.ProjectOnPlane(direction,Vector3.up).normalized;
     }
     
     public void SetModifier(string name, float modifier){
@@ -59,6 +66,7 @@ public class Movement : MonoBehaviour
 
     void Update(){
         Move();
+        transform.rotation = Quaternion.Lerp(transform.rotation,Quaternion.LookRotation(lookDirection),rotateSpeed*Time.deltaTime);
     }
 
     void Move(){

@@ -1,5 +1,6 @@
 using System;
 using DG.Tweening;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class DissolveController : MonoBehaviour
@@ -12,6 +13,7 @@ public class DissolveController : MonoBehaviour
     {
         Ability.activated.AddListener(Activate);
         Ability.deactivated.AddListener(Deactivate);
+        Deactivate();
     }
 
     [ContextMenu("Activate Dissolve")]
@@ -32,5 +34,9 @@ public class DissolveController : MonoBehaviour
                 new Vector4(Shader.GetGlobalVector("_MainParams").x, x, Shader.GetGlobalVector("_MainParams").z, Shader.GetGlobalVector("_MainParams").w)),
             fogDensityDeactivated, duration);
         DOTween.To(() => Shader.GetGlobalFloat("_value"), x => Shader.SetGlobalFloat("_value", x), 0, duration);
+    }
+
+    public void OnDestroy(){
+        Deactivate();
     }
 }

@@ -90,7 +90,6 @@ GameObject:
   - component: {fileID: 2845088842308946155}
   - component: {fileID: 4733051573422807408}
   - component: {fileID: 3473255511688260161}
-  - component: {fileID: 7252459046783782702}
   m_Layer: 0
   m_Name: MazeManager
   m_TagString: Untagged
@@ -171,7 +170,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b42c3574630ad149bd4ec91e25b1a6f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mazeSize: 25
+  mazeSize: 20
   prefabSize: 3
   wallPrefab: {fileID: 241064325672397137, guid: 32cbbe26c08e2d948a84b3aa885b86b0, type: 3}
   wallSpecialPrefabs:
@@ -193,21 +192,6 @@ MonoBehaviour:
   specialWallChance: 0.1
   specialFloorChance: 0.1
   objectChance: 0.3
---- !u!114 &7252459046783782702
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3481888851108829042}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8b78f87357119d34886233935bd75885, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  duration: 0.2
-  fogDensityDeactivated: 0.1
-  fogDensityActivated: 0.3
 --- !u!1 &4962651482346045762
 GameObject:
   m_ObjectHideFlags: 0
