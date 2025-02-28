@@ -6,7 +6,7 @@ public class NavMeshBaker : MonoBehaviour
 {
     
     NavMeshSurface navMeshSurface;
-    void Start()
+    void Awake()
     {
         navMeshSurface = GetComponent<NavMeshSurface>();
         MazeGenerator.mazeGenerated.AddListener(()=>{transform.parent = transform.parent.GetChild(0);});

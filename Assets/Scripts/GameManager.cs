@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class GameMode : MonoBehaviour
+public class GameManager : MonoBehaviour
 {
     void Start()
     {

@@ -71,7 +71,7 @@ public class EnemyAI : MonoBehaviour{
     }
 
     void OnAIStateChanged(AIState state){
-        if (state == AIState.Aggressive)print("bik");
+        //if (state == AIState.Aggressive)print("bik");
         movement.ResetModifiers();
         stateTime = 0f;
         switch(state){
@@ -122,7 +122,7 @@ public class EnemyAI : MonoBehaviour{
 
     protected void OnAny(){
         float distanceToPlayer = DistanceToPlayer(); 
-        if (distanceToPlayer < aggressiveRadius && nearestAggresor != this){
+        if (distanceToPlayer < aggressiveRadius && nearestAggresor != this && aIState != AIState.Aggressive){
             if (nearestAggresor == null || nearestAggresor.DistanceToPlayer()>distanceToPlayer){
                 aIState = AIState.Aggressive;
                 aIStateChanged.Invoke(aIState);
@@ -147,6 +147,8 @@ public class EnemyAI : MonoBehaviour{
     protected Vector3 GetPlayerPosition(){
         return PlayerController.position;
     }
+    
+
     protected Vector3 GetRandomDestination(){
         // Получаем данные триангуляции NavMesh
         NavMeshTriangulation navMeshData = NavMesh.CalculateTriangulation();

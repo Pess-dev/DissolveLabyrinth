@@ -80,7 +80,7 @@ public class MazeGenerator : MonoBehaviour
         // Внутренние горизонтальные стены (северные)
         for (int x = 0; x < mazeSize; x++)
         {
-            for (int y = 0; y < mazeSize - 1; y++)
+            for (int y = 0; y < mazeSize; y++)
             {
                 if (grid[x, y].north)
                 {
@@ -103,7 +103,7 @@ public class MazeGenerator : MonoBehaviour
 
 
         // Внутренние вертикальные стены (восточные)
-        for (int x = 0; x < mazeSize - 1; x++)
+        for (int x = 0; x < mazeSize; x++)
         {
             for (int y = 0; y < mazeSize; y++)
             {
@@ -167,41 +167,41 @@ public class MazeGenerator : MonoBehaviour
         mazeGenerated.Invoke();
     }
 
-void SpawnPillars()
-{
-    if (pillarPrefab == null||largePillarPrefab==null)
+    void SpawnPillars()
     {
-        Debug.LogError("Префаб столба не назначен!");
-        return;
-    }
-
-    for (int x = 0; x < mazeSize; x++)
-    {
-        for (int y = 0; y < mazeSize; y++)
+        if (pillarPrefab == null||largePillarPrefab==null)
         {
-            Vector3 pillarPosition = new Vector3(
-                    (x - mazeSize / 2f) * prefabSize,
-                    0,
-                    (y - mazeSize / 2f) * prefabSize
-                );
-            
-            if (Random.value<=largePillarChance){   
-                Instantiate(largePillarPrefab, pillarPosition, Quaternion.identity, mazeParent);
-                continue;
-            }
+            Debug.LogError("Префаб столба не назначен!");
+            return;
+        }
 
-           // if (!((grid[x,y].east||grid[x,y].west||grid[x,y].north||grid[x,y].south)&&(x==0 &&!grid[x,y].south||y==0 &&!grid[x,y].west)))
-            if ((x!=0 || grid[x,y].south)&&(y!=0 || grid[x,y].west)&&(y!=0||x!=0|| !(grid[x,y].west && grid[x,y].south)))
+        for (int x = 0; x <= mazeSize; x++)
+        {
+            for (int y = 0; y <= mazeSize; y++)
             {
+                Vector3 pillarPosition = new Vector3(
+                        (x - mazeSize / 2f) * prefabSize,
+                        0,
+                        (y - mazeSize / 2f) * prefabSize
+                    );
                 
-                GameObject pillar = Instantiate(pillarPrefab, pillarPosition, Quaternion.identity, mazeParent);
+                if (Random.value<=largePillarChance){   
+                    Instantiate(largePillarPrefab, pillarPosition, Quaternion.identity, mazeParent);
+                    continue;
+                }
 
-                pillar.name+=""+grid[x,y].north+grid[x,y].south+grid[x,y].east+grid[x,y].west;
+            // if (!((grid[x,y].east||grid[x,y].west||grid[x,y].north||grid[x,y].south)&&(x==0 &&!grid[x,y].south||y==0 &&!grid[x,y].west)))
+                if ((x!=0 || grid[x,y].south)&&(y!=0 || grid[x,y].west)&&(y!=0||x!=0|| !(grid[x,y].west && grid[x,y].south)))
+                {
+                    
+                    GameObject pillar = Instantiate(pillarPrefab, pillarPosition, Quaternion.identity, mazeParent);
+
+                    pillar.name+=""+grid[x,y].north+grid[x,y].south+grid[x,y].east+grid[x,y].west;
+                }
+
             }
-
         }
     }
-}
 
     void GenerateMaze()
     {
