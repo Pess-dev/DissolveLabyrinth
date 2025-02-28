@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using UnityEngine;
@@ -19,10 +20,13 @@ public class EnemyAI : MonoBehaviour{
     public float killRadius = 0.6f;
     public float patrolingTime = 10f;
     public float minDistanceToTarget = 0.5f;
+    public string avoidTag = "Enemy";
     
     public float idleTime = 5f;
 
     public UnityEvent<AIState> aIStateChanged = new UnityEvent<AIState>(); 
+    public static EnemyAI nearestAggresor; 
+
 
     public enum AIState
     {
@@ -76,9 +80,11 @@ public class EnemyAI : MonoBehaviour{
             case AIState.Aggressive: OnAggressiveFirst(); break;
         }
     }
+
     protected void OnIdleFirst(){
         SetDestination(transform.position);
     }
+
     protected void OnIdle(){
         if (stateTime>idleTime){
             aIState = AIState.Patroling;
@@ -106,6 +112,7 @@ public class EnemyAI : MonoBehaviour{
         if (DistanceToPlayer()>=forgiveRadius){
             aIState = AIState.Idle;
             aIStateChanged.Invoke(aIState);
+            nearestAggresor = null;
             return;
         }
 
@@ -114,10 +121,19 @@ public class EnemyAI : MonoBehaviour{
     }
 
     protected void OnAny(){
-        if (DistanceToPlayer() < aggressiveRadius){
-            aIState = AIState.Aggressive;
-            aIStateChanged.Invoke(aIState);
-            return;
+        float distanceToPlayer = DistanceToPlayer(); 
+        if (distanceToPlayer < aggressiveRadius && nearestAggresor != this){
+            if (nearestAggresor == null || nearestAggresor.DistanceToPlayer()>distanceToPlayer){
+                aIState = AIState.Aggressive;
+                aIStateChanged.Invoke(aIState);
+                if (nearestAggresor!=null)
+                {
+                    nearestAggresor.aIState = AIState.Idle;
+                    nearestAggresor.aIStateChanged.Invoke(aIState);
+                }
+                nearestAggresor = this;
+                return;
+            }
         }
     }
     
@@ -190,23 +206,23 @@ public class EnemyAI : MonoBehaviour{
     }
 
     void OnDrawGizmosSelected() {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, aggressiveRadius);
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(transform.position, forgiveRadius);
-        Gizmos.color = Color.green;
-        Gizmos.DrawWireSphere(transform.position, minDistanceToTarget);
+        // Gizmos.color = Color.red;
+        // Gizmos.DrawWireSphere(transform.position, aggressiveRadius);
+        // Gizmos.color = Color.yellow;
+        // Gizmos.DrawWireSphere(transform.position, forgiveRadius);
+        // Gizmos.color = Color.green;
+        // Gizmos.DrawWireSphere(transform.position, minDistanceToTarget);
 
-        Gizmos.color = Color.blue;
-        for (int i = 0; i < path.corners.Length-1; i++) {
-            Gizmos.DrawLine(path.corners[i], path.corners[i + 1]);
+        // Gizmos.color = Color.blue;
+        // for (int i = 0; i < path.corners.Length-1; i++) {
+        //     Gizmos.DrawLine(path.corners[i], path.corners[i + 1]);
             
-            Gizmos.DrawSphere(path.corners[i + 1], 0.1f);
-        }
-        Gizmos.DrawSphere(target, 0.5f);
-        Gizmos.color = Color.green;
-        Gizmos.DrawSphere(GetNextPosition(), 0.11f);
+        //     Gizmos.DrawSphere(path.corners[i + 1], 0.1f);
+        // }
+        // Gizmos.DrawSphere(target, 0.5f);
+        // Gizmos.color = Color.green;
+        // Gizmos.DrawSphere(GetNextPosition(), 0.11f);
 
-        print(aIState+" "+currentCorner);
+        // print(aIState+" "+currentCorner);
     }
 }

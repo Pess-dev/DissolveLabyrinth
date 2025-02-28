@@ -208,6 +208,7 @@ MonoBehaviour:
   killRadius: 0.5
   patrolingTime: 10
   minDistanceToTarget: 0.1
+  avoidTag: Enemy
   idleTime: 5
   aIStateChanged:
     m_PersistentCalls:
@@ -282,11 +283,14 @@ VisualEffect:
       - m_Value: 0.1
         m_Name: Size
         m_Overridden: 1
-      - m_Value: 1
+      - m_Value: 2
         m_Name: Velocity
         m_Overridden: 1
       - m_Value: 25
         m_Name: Distance
+        m_Overridden: 1
+      - m_Value: 0.2
+        m_Name: MinColorBright
         m_Overridden: 1
     m_Vector2f:
       m_Array: []
@@ -297,7 +301,7 @@ VisualEffect:
         m_Overridden: 1
     m_Vector4f:
       m_Array:
-      - m_Value: {x: 0.9716981, y: 0, z: 0, w: 0}
+      - m_Value: {x: 1, y: 0, z: 0, w: 0}
         m_Name: Color
         m_Overridden: 1
     m_Uint:

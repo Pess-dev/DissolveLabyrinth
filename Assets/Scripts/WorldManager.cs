@@ -12,6 +12,8 @@ public class WorldManager : MonoBehaviour
     //Transform currentChunk = null;
     bool ready = false;
 
+    public static Vector3 offset {get; private set;} = Vector3.zero;
+
     public static UnityEvent chunksCreated = new UnityEvent();
 
     void Awake()
@@ -52,7 +54,6 @@ public class WorldManager : MonoBehaviour
         //         obj.transform.position += delta;
         //     }
         // }
-
     }
 
     Transform NearestChunk(Vector3 position){
@@ -99,7 +100,7 @@ public class WorldManager : MonoBehaviour
     void RepositionChunks(int moveX, int moveZ)
     {
         Vector3 moveOffset = new Vector3(moveX * chunkSize, 0, moveZ * chunkSize);
-        
+        offset += moveOffset;
         foreach (Transform chunk in chunkPool)
         {
             chunk.position += moveOffset;

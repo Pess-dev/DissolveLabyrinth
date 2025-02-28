@@ -90,7 +90,11 @@ public class MazeGenerator : MonoBehaviour
                         (y - mazeSize / 2f + 1f) * prefabSize
                     );
                     wallRandomed = wallPrefab;
-                    if (Random.value <= specialWallChance) wallRandomed = wallSpecialPrefabs[Random.Range(0, wallSpecialPrefabs.Count)];
+                    if (Random.value <= specialWallChance) {
+                        wallRandomed = wallSpecialPrefabs[Random.Range(0, wallSpecialPrefabs.Count)];
+                        grid[x, y].north = false;
+                        if(y<mazeSize)grid[x, y+1].south = false;
+                    }
 
                     Instantiate(wallRandomed, wallPosition, Quaternion.Euler(0, 90, 0), mazeParent);
                 }
@@ -111,50 +115,52 @@ public class MazeGenerator : MonoBehaviour
                         (y - mazeSize / 2f + 0.5f) * prefabSize
                     );
                     wallRandomed = wallPrefab;
-                    if (Random.value <= specialWallChance) wallRandomed = wallSpecialPrefabs[Random.Range(0, wallSpecialPrefabs.Count)];
+                    if (Random.value <= specialWallChance) {wallRandomed = wallSpecialPrefabs[Random.Range(0, wallSpecialPrefabs.Count)];
+                        grid[x, y].east = false;
+                        if(x<mazeSize)grid[x+1, y].west = false;
+                    }
                     Instantiate(wallRandomed, wallPosition, Quaternion.identity, mazeParent);
                 }
             }
         }
 
-        
+        // Статичные предметы
+        for (int x = 1; x < mazeSize - 1; x++)
+        {
+            for (int y = 1; y < mazeSize-1; y++)
+            {
+                GameObject furniturePrefab;
+                Vector3 furniturePosition = new Vector3(
+                        (x - mazeSize / 2f) * prefabSize,
+                        0,
+                        (y - mazeSize / 2f) * prefabSize
+                );
+                if (grid[x, y].north && Random.value<=objectChance){
+                    Vector3 offsetPosition = furniturePosition + new Vector3(0.5f,0,1f)*prefabSize;
+                    furniturePrefab = furniturePrefabs[Random.Range(0, furniturePrefabs.Count)];
+                    Instantiate(furniturePrefab, offsetPosition, Quaternion.Euler(0, 0, 0), mazeParent).name = "north "+x+" "+y;
 
-        // // Статичные предметы
-        // for (int x = 0; x < mazeSize - 1; x++)
-        // {
-        //     for (int y = 0; y < mazeSize-1; y++)
-        //     {
-        //         GameObject furniturePrefab;
-        //         Vector3 furniturePosition = new Vector3(
-        //                 (x - mazeSize / 2f) * prefabSize,
-        //                 0,
-        //                 (y - mazeSize / 2f) * prefabSize
-        //         );
-        //         if (grid[x, y].north && Random.value<=objectChance){
-        //             furniturePosition += new Vector3(0.5f,0,1f)*prefabSize;
-        //             furniturePrefab = furniturePrefabs[Random.Range(0, furniturePrefabs.Count)];
-        //             Instantiate(furniturePrefab, furniturePosition, Quaternion.Euler(0, 180, 0), mazeParent);
-        //         }
-        //         if (grid[x, y].south && Random.value<=objectChance)
-        //         {
-        //             furniturePosition += new Vector3(-0.5f,0,-1f)*prefabSize;
-        //             furniturePrefab = furniturePrefabs[Random.Range(0, furniturePrefabs.Count)];
-        //             Instantiate(furniturePrefab, furniturePosition, Quaternion.Euler(0, 0, 0), mazeParent);
-        //         }
-        //         // if (grid[x, y].east && Random.value<=objectChance)
-        //         // {
-        //         //     furniturePosition += new Vector3(0.5f,0,0)*prefabSize;
-        //         //     furniturePrefab = furniturePrefabs[Random.Range(0, furniturePrefabs.Count)];
-        //         //     Instantiate(furniturePrefab, furniturePosition, Quaternion.Euler(0, 270, 0), mazeParent);
-        //         // }
-        //         // if (grid[x, y].west && Random.value<=objectChance)
-        //         // {
-        //         //     furniturePosition += new Vector3(-0.5f,0,0)*prefabSize;
-        //         //     furniturePrefab = furniturePrefabs[Random.Range(0, furniturePrefabs.Count)];
-        //         //     Instantiate(furniturePrefab, furniturePosition, Quaternion.Euler(0, 0, 0), mazeParent);
-        //         // }
-        //     }
-        // }
+                }
+                if (grid[x, y].south && Random.value<=objectChance)
+                {
+                    Vector3 offsetPosition = furniturePosition + new Vector3(0.5f,0,0f)*prefabSize;
+                    furniturePrefab = furniturePrefabs[Random.Range(0, furniturePrefabs.Count)];
+                    Instantiate(furniturePrefab, offsetPosition, Quaternion.Euler(0, 180, 0), mazeParent).name = "south "+x+" "+y;;
+                }
+                if (grid[x, y].east && Random.value<=objectChance)
+                {
+                    Vector3 offsetPosition = furniturePosition + new Vector3(1f,0,0.5f)*prefabSize;
+                    furniturePrefab = furniturePrefabs[Random.Range(0, furniturePrefabs.Count)];
+                    Instantiate(furniturePrefab, offsetPosition, Quaternion.Euler(0, 90, 0), mazeParent).name = "east "+x+" "+y;;
+                }
+                if (grid[x, y].west && Random.value<=objectChance)
+                {
+                    Vector3 offsetPosition = furniturePosition + new Vector3(0f,0,0.5f)*prefabSize;
+                    furniturePrefab = furniturePrefabs[Random.Range(0, furniturePrefabs.Count)];
+                    Instantiate(furniturePrefab, offsetPosition, Quaternion.Euler(0, 270, 0), mazeParent).name = "west "+x+" "+y;;
+                }
+            }
+        }
 
         SpawnPillars();
 
@@ -272,17 +278,17 @@ void SpawnPillars()
             grid[current.x, current.y].east = false;
             grid[next.x, next.y].west = false;
         }
-        else if (dx == -1)
+        if (dx == -1)
         {
             grid[current.x, current.y].west = false;
             grid[next.x, next.y].east = false;
         }
-        else if (dy == 1)
+        if (dy == 1)
         {
             grid[current.x, current.y].north = false;
             grid[next.x, next.y].south = false;
         }
-        else if (dy == -1)
+        if (dy == -1)
         {
             grid[current.x, current.y].south = false;
             grid[next.x, next.y].north = false;

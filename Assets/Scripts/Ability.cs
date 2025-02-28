@@ -30,7 +30,7 @@ public class Ability : MonoBehaviour
     float timer = 0f;
     [SerializeField] float stamina = 0f;
 
-    public static bool isDissolve = false;
+    public static bool isActiveAbility = false;
     bool pushOut = false;
 
     List<Collider> entered = new List<Collider>();
@@ -49,7 +49,7 @@ public class Ability : MonoBehaviour
 
     void ChangeDissolve(bool value){
         if (!value) return;
-        if (isDissolve) return;
+        if (isActiveAbility) return;
 
         if (stamina >= staminaToStart && timer > cooldown){
             ActivateDissolve();
@@ -57,7 +57,7 @@ public class Ability : MonoBehaviour
     }
 
     void ActivateDissolve(){
-        isDissolve = true;
+        isActiveAbility = true;
         pushOut = false;
         timer = 0f;
         cc.excludeLayers = excludeActivated;
@@ -69,7 +69,7 @@ public class Ability : MonoBehaviour
     }
 
     void DeactivateDissolve(){
-        isDissolve = false;
+        isActiveAbility = false;
         pushOut = false;
         timer = 0f;
         
@@ -84,10 +84,10 @@ public class Ability : MonoBehaviour
     void Update(){
         timer += Time.deltaTime;
         
-        if (isDissolve) stamina = Mathf.Clamp(stamina-costPerSecond*Time.deltaTime,0,maxStamina);
+        if (isActiveAbility) stamina = Mathf.Clamp(stamina-costPerSecond*Time.deltaTime,0,maxStamina);
         else stamina = Mathf.Clamp(stamina+recoveryPerSecond*Time.deltaTime,0,maxStamina);
 
-        if (isDissolve && IsInsideWall()){
+        if (isActiveAbility && IsInsideWall()){
             movement.SetModifier("inWalls",inWallSpeedModifier);
             movement.SetMinimumSpeed(abilityMinSpeed);
         }
@@ -96,7 +96,7 @@ public class Ability : MonoBehaviour
             movement.ResetMinimumSpeed();
         }
 
-        if (isDissolve && (timer > maxDuration || stamina<=0 || entered.Count==0 && timer > waitDuration)){
+        if (isActiveAbility && (timer > maxDuration || stamina<=0 || entered.Count==0 && timer > waitDuration)){
             pushOut = true;
         }
 

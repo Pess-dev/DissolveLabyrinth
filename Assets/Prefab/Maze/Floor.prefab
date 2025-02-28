@@ -17,7 +17,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1867543419585747261
 Transform:
   m_ObjectHideFlags: 0
@@ -44,7 +44,7 @@ Light:
   serializedVersion: 11
   m_Type: 2
   m_Color: {r: 1, g: 0.7337152, b: 0.28773582, a: 1}
-  m_Intensity: 0.9
+  m_Intensity: 0.1
   m_Range: 3
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -350,7 +350,7 @@ GameObject:
   - component: {fileID: 2831559943312720222}
   m_Layer: 0
   m_Name: Visual
-  m_TagString: Untagged
+  m_TagString: Visual
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -368,7 +368,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 9093919185050991328}
   - {fileID: 1867543419585747261}
+  - {fileID: 9093919185050991328}
   m_Father: {fileID: 6899058147052131641}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

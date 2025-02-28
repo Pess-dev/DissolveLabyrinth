@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Movable
   - Spawner
+  - Visual
   layers:
   - Default
   - TransparentFX

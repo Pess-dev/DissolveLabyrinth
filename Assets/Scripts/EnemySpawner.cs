@@ -11,15 +11,16 @@ public class EnemySpawner : MonoBehaviour
         [SerializeField]public GameObject prefab;
         [SerializeField]public int count;
     }
-    void Start(){
+    void Awake(){
         MazeGenerator.mazeGenerated.AddListener(SpawnEnemies);
     }
 
     void SpawnEnemies(){
         List<GameObject> spawners = new List<GameObject>();
         GameObject.FindGameObjectsWithTag("Spawner", spawners);
+        print(spawners.Count);
         spawners.RemoveAll(x => Vector3.Distance(x.transform.position, PlayerController.position) < minDistanceFromPlayer);
-         
+        print(spawners.Count);
         foreach(SpawnObject enemy in enemies){
             for (int i = 0; i < enemy.count; i++){
                 if (spawners.Count == 0) break;

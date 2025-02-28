@@ -1,0 +1,64 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &5560633614020149785
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8742777864719058499}
+  - component: {fileID: 518168725392288000}
+  m_Layer: 0
+  m_Name: MazeGenerator
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8742777864719058499
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5560633614020149785}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 8.599611, y: -0.40555537, z: -9.72005}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &518168725392288000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5560633614020149785}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b42c3574630ad149bd4ec91e25b1a6f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mazeSize: 25
+  prefabSize: 3
+  wallPrefab: {fileID: 241064325672397137, guid: 32cbbe26c08e2d948a84b3aa885b86b0, type: 3}
+  wallSpecialPrefabs:
+  - {fileID: 241064325672397137, guid: 88eacf8549ad7f443b2124ca12c54825, type: 3}
+  - {fileID: 241064325672397137, guid: 94dea857a3e5485408f7efd13e35bd97, type: 3}
+  pillarPrefab: {fileID: 9099359155624042919, guid: 079ece746ea94ca46a40316650e483e4, type: 3}
+  largePillarPrefab: {fileID: 9099359155624042919, guid: 3678b5c5309fc0841a73a8873159f9a9, type: 3}
+  floorPrefab: {fileID: 3323630791357088525, guid: 23f6dfb0ff1fb6e47aac5a13f541288e, type: 3}
+  floorSpecialPrefabs:
+  - {fileID: 3323630791357088525, guid: dbcd8d7afe5718240998b15143e4bbde, type: 3}
+  furniturePrefabs:
+  - {fileID: 8813694982788579606, guid: 83e7b7dcce63f1c4d9333a9f908c998f, type: 3}
+  mazeParent: {fileID: 0}
+  largePillarChance: 0.1
+  specialWallChance: 0.1
+  specialFloorChance: 0.1
+  objectChance: 1
