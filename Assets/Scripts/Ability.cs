@@ -19,6 +19,10 @@ public class Ability : MonoBehaviour
     [SerializeField] float inWallSpeedModifier = 0.5f;
     [SerializeField] float abilityMinSpeed = 1f;
 
+    [SerializeField] float minCameraShake = 0.1f;
+    [SerializeField] float maxCameraShake = 1f;
+    [SerializeField] float cameraShakeRoughness = 1f;
+
     [SerializeField] float pushOutAcceleration = 5f;
     [SerializeField] LayerMask excludeDeactivated = 0;
     [SerializeField] LayerMask excludeActivated = 0;
@@ -37,6 +41,8 @@ public class Ability : MonoBehaviour
 
     public static UnityEvent activated = new UnityEvent();
     public static UnityEvent deactivated = new UnityEvent();
+    
+    public UnityEvent<float> staminaChanged = new UnityEvent<float>();
 
     void Start()
     {
@@ -45,6 +51,7 @@ public class Ability : MonoBehaviour
         cc = GetComponent<CharacterController>();
         playerCollider = GetComponent<Collider>();
         movement = GetComponent<Movement>();
+
     }
 
     void ChangeDissolve(bool value){
@@ -84,8 +91,7 @@ public class Ability : MonoBehaviour
     void Update(){
         timer += Time.deltaTime;
         
-        if (isActiveAbility) stamina = Mathf.Clamp(stamina-costPerSecond*Time.deltaTime,0,maxStamina);
-        else stamina = Mathf.Clamp(stamina+recoveryPerSecond*Time.deltaTime,0,maxStamina);
+        UpdateStamina();
 
         if (isActiveAbility && IsInsideWall()){
             movement.SetModifier("inWalls",inWallSpeedModifier);
@@ -130,6 +136,18 @@ public class Ability : MonoBehaviour
                 movement.AddFlatVelocity(direction*pushOutAcceleration*Time.deltaTime);
             }
             else DeactivateDissolve();
+        }
+    }
+
+    void UpdateStamina(){
+        float staminaOld = stamina;
+        if (isActiveAbility) stamina = Mathf.Clamp(stamina-costPerSecond*Time.deltaTime,0,maxStamina);
+        else stamina = Mathf.Clamp(stamina+recoveryPerSecond*Time.deltaTime,0,maxStamina);
+        if (staminaOld!=stamina) {
+            float value = stamina/maxStamina;
+            staminaChanged.Invoke(1-value);
+            
+            //cameraShake.StartShake(value,cameraShakeRoughness,0);
         }
     }
 

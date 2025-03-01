@@ -27,8 +27,8 @@ public class PlayerController : MonoBehaviour
             EnableControls();
         else 
             DisableControls();
-        GameManager.instance.changedToPlay.AddListener(EnableControls);
-        GameManager.instance.changedToPause.AddListener(DisableControls);
+        GameManager.instance.disableControls.AddListener(DisableControls);
+        GameManager.instance.enableControls.AddListener(EnableControls);
     }
 
     void Update()
@@ -40,9 +40,10 @@ public class PlayerController : MonoBehaviour
         position = transform.position;
         movement.SetMoveDirection(InputManager.moveDirection);
         
-        cameraTransform.Rotate(Vector3.up * InputManager.lookDirection.x);
+        movement.YRotate(InputManager.look.x);
+        //cameraTransform.Rotate(Vector3.up * InputManager.look.x);
         
-        verticalLookRotation -= InputManager.lookDirection.y; 
+        verticalLookRotation -= InputManager.look.y; 
         verticalLookRotation = Mathf.Clamp(verticalLookRotation, -cameraMaxAngle, cameraMaxAngle);
         cameraTransform.localEulerAngles = new Vector3(verticalLookRotation, cameraTransform.localEulerAngles.y, 0);
 

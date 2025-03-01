@@ -17,6 +17,8 @@ public class EnemyAI : MonoBehaviour{
     public float aggressiveRadius = 15f;
     public float forgiveRadius = 20f;
     public float killRadius = 0.6f;
+    public float killTime = 0.1f;
+    public float killAbilityTime = 0.6f;
     public float abilityRadius = 3f;
     public float patrolingTime = 10f;
     public float minDistanceToTarget = 0.5f;
@@ -28,6 +30,8 @@ public class EnemyAI : MonoBehaviour{
     public float abilitySpeedModifier = 0.2f;
     public float abilityTime = 3f;
     public float abilityFactor = 2f;
+
+
     float timerAbility = 0;
     bool isActiveAbility = false;
 
@@ -42,7 +46,8 @@ public class EnemyAI : MonoBehaviour{
         Aggressive
     }
     
-    protected float stateTime = 0f;
+    protected float stateTimer = 0f;
+    protected float killTimer = 0f;
 
     protected AIState aIState = AIState.Idle;
 
@@ -60,7 +65,7 @@ public class EnemyAI : MonoBehaviour{
     void Start(){
         movement = GetComponent<Movement>();    
         path = new NavMeshPath();
-        stateTime = Random.value*idleTime;
+        stateTimer = Random.value*idleTime;
         worldSyncPosition = GetComponent<WorldSyncPosition>();
         worldSyncPosition.onSync.AddListener(OnMovedBySync);
         //navMeshAgent = GetComponent<NavMeshAgent>();
@@ -69,20 +74,19 @@ public class EnemyAI : MonoBehaviour{
         aIStateChanged.AddListener(OnAIStateChanged);
 
         avoidTransforms = GameObject.FindGameObjectsWithTag(avoidTag).Select(t => t.transform).ToList();
+        DisableAbility();
     }
 
     void FixedUpdate(){
-        stateTime += Time.fixedDeltaTime;
+        stateTimer += Time.fixedDeltaTime;
         timerAbility += Time.fixedDeltaTime;
 
-       
+        if (aIState!=AIState.Idle && path.status==NavMeshPathStatus.PathInvalid && !isActiveAbility && !IsOnMesh()){
+            EnableAbility(false);
+        }
 
         if (timerAbility>abilityTime && isActiveAbility && IsOnMesh()) {
             DisableAbility();
-        }
-
-        if (aIState!=AIState.Idle && path.status==NavMeshPathStatus.PathInvalid && !isActiveAbility){
-            EnableAbility(false);
         }
 
         if (!isActiveAbility){
@@ -104,15 +108,17 @@ public class EnemyAI : MonoBehaviour{
                 movement.SetMoveDirection(direction);
                 movement.SetLookDirection(direction);
             }
-        else 
+        else {
             movement.SetMoveDirection(Vector3.zero);
+            movement.SetLookDirection((target-transform.position).normalized);
+        }
     }
 
     void OnAIStateChanged(AIState state){
         //if (state == AIState.Aggressive)print("bik");
         if (aIState == AIState.Aggressive) movement.RemoveModifier("aggressive");
         aIState = state;
-        stateTime = 0f;
+        stateTimer = 0f;
         switch(state){
             case AIState.Idle: OnIdleFirst(); break;
             case AIState.Patroling: OnPatrolingFirst(); break;
@@ -126,7 +132,7 @@ public class EnemyAI : MonoBehaviour{
     }
 
     protected void OnIdle(){
-        if (stateTime>idleTime){
+        if (stateTimer>idleTime){
             aIStateChanged.Invoke(AIState.Patroling);
             return;
         }
@@ -137,7 +143,7 @@ public class EnemyAI : MonoBehaviour{
         SetDestination(target);  
     }
     protected void OnPatroling(){
-        if (stateTime>patrolingTime||Vector3.ProjectOnPlane(target-transform.position,Vector3.up).magnitude<=minDistanceToTarget){
+        if (stateTimer>patrolingTime||Vector3.ProjectOnPlane(target-transform.position,Vector3.up).magnitude<=minDistanceToTarget){
             aIStateChanged.Invoke(AIState.Idle);
             return;
         }
@@ -148,7 +154,8 @@ public class EnemyAI : MonoBehaviour{
     }
 
     protected void OnAggressive(){
-        if (DistanceToPlayer()>=forgiveRadius){
+        float distanceFromPlayer = DistanceToPlayer();
+        if (distanceFromPlayer>=forgiveRadius){
             aIStateChanged.Invoke(AIState.Idle);
             nearestAggresor = null;
             return;
@@ -156,14 +163,28 @@ public class EnemyAI : MonoBehaviour{
 
         float length = GetPathLength(path);
         if (timerAbility > abilityCooldown 
-        && DistanceToPlayer() <= abilityRadius 
+        && distanceFromPlayer <= abilityRadius 
         && !isActiveAbility 
-        && (length>DistanceToPlayer()*abilityFactor||path.status!=NavMeshPathStatus.PathComplete&&length<=abilityRadius)) {
+        && (length>distanceFromPlayer*abilityFactor||path.status!=NavMeshPathStatus.PathComplete&&length<=abilityRadius)) {
             EnableAbility(true);
         }
 
         target = GetPlayerPosition();
         SetDestination(target);
+
+        if (distanceFromPlayer<=killRadius){
+            print("going to kill");
+            killTimer+=Time.fixedDeltaTime;
+            if (isActiveAbility && killTimer>killAbilityTime||!isActiveAbility && killTimer>killTime){
+                KillPlayer();
+            } 
+        }
+        else 
+            killTimer = 0;
+    }
+
+    void KillPlayer(){
+        GameManager.instance.OnKillcam(transform.position);
     }
 
     void EnableAbility(bool aggressive){
@@ -175,11 +196,14 @@ public class EnemyAI : MonoBehaviour{
         movement.SetModifier("ability",abilitySpeedModifier);
         isActiveAbility = true;
         timerAbility=0;
+
+        abilityActivated.Invoke();
     }
 
     void DisableAbility(){
         movement.RemoveModifier("ability");    
         isActiveAbility = false;
+        abilityDectivated.Invoke();
     }
 
     public static float GetPathLength(NavMeshPath path){

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Events;
 
 [RequireComponent(typeof(CharacterController))]
 public class Movement : MonoBehaviour
@@ -24,7 +25,7 @@ public class Movement : MonoBehaviour
 
     Dictionary<string,float> modifiers = new Dictionary<string, float>();
 
-
+    public UnityEvent<Vector3> velocityChanged = new UnityEvent<Vector3>(); 
 
     void Start()
     {
@@ -38,6 +39,11 @@ public class Movement : MonoBehaviour
     public void SetLookDirection(Vector3 direction){
         lookDirection = Vector3.ClampMagnitude(direction,1);
         lookDirection = Vector3.ProjectOnPlane(direction,Vector3.up).normalized;
+    }
+
+    public void YRotate(float angle){
+        transform.Rotate(Vector3.up*angle);
+        lookDirection = transform.forward;
     }
     
     public void SetModifier(string name, float modifier){
@@ -93,6 +99,8 @@ public class Movement : MonoBehaviour
         cc.Move((flatVelocity - Vector3.up*2)*Time.deltaTime);
         Vector3 after = transform.position;
         deltaPosition = transform.position - pos;
+
+        velocityChanged.Invoke(flatVelocity);
         
         //transform.position = Vector3.Project(transform.position, Vector3.up); 
        // print(pos+" "+after+" "+transform.position);

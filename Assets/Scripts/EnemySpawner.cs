@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour
 {
-    [SerializeField] float minDistanceFromPlayer = 10f;
+    [SerializeField] float minDistanceFromPlayer = 20f;
     [SerializeField] List<SpawnObject> enemies = new List<SpawnObject>();
     [Serializable]
     public class SpawnObject{
@@ -12,7 +12,7 @@ public class EnemySpawner : MonoBehaviour
         [SerializeField]public int count;
     }
     void Awake(){
-        MazeGenerator.mazeGenerated.AddListener(SpawnEnemies);
+        MazeGenerator.mazeGeneratedForSpawners.AddListener(SpawnEnemies);
     }
 
     void SpawnEnemies(){

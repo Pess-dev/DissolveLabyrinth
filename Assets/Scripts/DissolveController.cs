@@ -8,6 +8,7 @@ public class DissolveController : MonoBehaviour
     [SerializeField] float duration = 1f;
     [SerializeField] public float fogDensityDeactivated = 0f;
     [SerializeField] public float fogDensityActivated = 0.5f;
+    static float _duration = 1f;
 
     void Start()
     {
@@ -17,15 +18,17 @@ public class DissolveController : MonoBehaviour
     }
 
     [ContextMenu("Activate Dissolve")]
-    public void Activate()
-    {
+    public void Activate(){
         DOTween.To(() => Shader.GetGlobalVector("_MainParams").y,
             x => Shader.SetGlobalVector("_MainParams",
                 new Vector4(Shader.GetGlobalVector("_MainParams").x, x, Shader.GetGlobalVector("_MainParams").z, Shader.GetGlobalVector("_MainParams").w)),
             fogDensityActivated, duration);
-        DOTween.To(() => Shader.GetGlobalFloat("_value"), x => Shader.SetGlobalFloat("_value", x), 1, duration);
+        ActivateShader();
     }
-
+    public static void ActivateShader(){
+        DOTween.To(() => Shader.GetGlobalFloat("_value"), x => Shader.SetGlobalFloat("_value", x), 1, _duration);
+    }
+    
     [ContextMenu("Deactivate Dissolve")]
     public void Deactivate()
     {
@@ -33,8 +36,12 @@ public class DissolveController : MonoBehaviour
             x => Shader.SetGlobalVector("_MainParams",
                 new Vector4(Shader.GetGlobalVector("_MainParams").x, x, Shader.GetGlobalVector("_MainParams").z, Shader.GetGlobalVector("_MainParams").w)),
             fogDensityDeactivated, duration);
-        DOTween.To(() => Shader.GetGlobalFloat("_value"), x => Shader.SetGlobalFloat("_value", x), 0, duration);
+        DeactivateShader();
     }
+    public static void DeactivateShader(){
+        DOTween.To(() => Shader.GetGlobalFloat("_value"), x => Shader.SetGlobalFloat("_value", x), 0, _duration);
+    }
+
 
     public void OnDestroy(){
         Deactivate();

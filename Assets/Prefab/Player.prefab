@@ -149,8 +149,9 @@ GameObject:
   m_Component:
   - component: {fileID: 1363958343558727335}
   - component: {fileID: 3771735540207163247}
+  - component: {fileID: 1142709832431417748}
   m_Layer: 0
-  m_Name: CinemachineCamera
+  m_Name: PlayerCamera
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -164,12 +165,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2450884465516482760}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.5, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 5545346762620240772}
+  m_Father: {fileID: 2842991357534896316}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &3771735540207163247
 MonoBehaviour:
@@ -184,8 +185,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Priority:
-    Enabled: 0
-    m_Value: 0
+    Enabled: 1
+    m_Value: 1
   OutputChannel: 1
   StandbyUpdate: 2
   m_StreamingVersion: 20241001
@@ -214,6 +215,56 @@ MonoBehaviour:
       BarrelClipping: 0.25
       Anamorphism: 0
   BlendHint: 0
+--- !u!114 &1142709832431417748
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2450884465516482760}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c37a4a4d4c21398489e4149541d0c876, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  walkShakeSpeed: 8
+  walkShakeXrange: 0.05
+  walkShakeYrange: 0.05
+  stillShakeSpeed: 1
+  stillShakeXrange: 0.1
+  stillShakeYrange: 0.07
+--- !u!1 &2632848416611032123
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4163520357583808095}
+  m_Layer: 0
+  m_Name: CameraHolder
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4163520357583808095
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2632848416611032123}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.5, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 2842991357534896316}
+  m_Father: {fileID: 5545346762620240772}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3042797272601315631
 GameObject:
   m_ObjectHideFlags: 0
@@ -405,6 +456,55 @@ MonoBehaviour:
   blendDistance: 0
   weight: 1
   sharedProfile: {fileID: 11400000, guid: 10fc4df2da32a41aaa32d77bc913491c, type: 2}
+--- !u!1 &5652246034790743768
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2842991357534896316}
+  - component: {fileID: 8949244583395737207}
+  m_Layer: 0
+  m_Name: CameraShaker
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2842991357534896316
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5652246034790743768}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1363958343558727335}
+  m_Father: {fileID: 4163520357583808095}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8949244583395737207
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5652246034790743768}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b511fb761b324c54391cfd13306f4606, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  magnitude: 0.05
+  minSpeed: 5
+  maxSpeed: 50
+  value: 0
 --- !u!1 &5811190793827044245
 GameObject:
   m_ObjectHideFlags: 0
@@ -583,7 +683,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6099536590564240679}
-  - {fileID: 1363958343558727335}
+  - {fileID: 4163520357583808095}
   - {fileID: 4182809254205244305}
   - {fileID: 2012904035586786726}
   - {fileID: 7389311875167024204}
@@ -603,6 +703,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 5
   acceleration: 50
+  rotateSpeed: 10
+  velocityChanged:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1142709832431417748}
+        m_TargetAssemblyTypeName: CameraMovementShaker, Assembly-CSharp
+        m_MethodName: SetVelocity
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &8841233838236739620
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -615,7 +731,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a55ff98f8dc1494eb034babfb873a1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cameraTransform: {fileID: 1363958343558727335}
+  cameraTransform: {fileID: 4163520357583808095}
   cameraMaxAngle: 60
 --- !u!143 &2788883435087305720
 CharacterController:
@@ -710,10 +826,13 @@ MonoBehaviour:
   maxStamina: 100
   costPerSecond: 10
   recoveryPerSecond: 10
-  staminaToStart: 30
+  staminaToStart: 50
   speedModifier: 0.8
   inWallSpeedModifier: 0.5
   abilityMinSpeed: 1
+  minCameraShake: 0.1
+  maxCameraShake: 1
+  cameraShakeRoughness: 1
   pushOutAcceleration: 500
   excludeDeactivated:
     serializedVersion: 2
@@ -722,3 +841,18 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 8
   stamina: 0
+  staminaChanged:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 8949244583395737207}
+        m_TargetAssemblyTypeName: CameraShaker, Assembly-CSharp
+        m_MethodName: SetValue
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2

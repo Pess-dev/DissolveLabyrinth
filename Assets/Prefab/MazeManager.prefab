@@ -61,7 +61,7 @@ MonoBehaviour:
   m_OverrideTileSize: 0
   m_TileSize: 256
   m_OverrideVoxelSize: 0
-  m_VoxelSize: 0.1
+  m_VoxelSize: 0.2
   m_MinRegionArea: 2
   m_NavMeshData: {fileID: 0}
   m_BuildHeightMesh: 0
@@ -126,7 +126,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d50fb167682c62041a177f2fd4dcc25f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minDistanceFromPlayer: 10
+  minDistanceFromPlayer: 20
   enemies:
   - prefab: {fileID: 6646566591252671866, guid: 2d7e18c9d5c478840b300023ea606feb, type: 3}
     count: 15
@@ -176,6 +176,8 @@ MonoBehaviour:
   wallSpecialPrefabs:
   - {fileID: 241064325672397137, guid: 88eacf8549ad7f443b2124ca12c54825, type: 3}
   - {fileID: 241064325672397137, guid: 94dea857a3e5485408f7efd13e35bd97, type: 3}
+  - {fileID: 241064325672397137, guid: dd965da4d0bbbc748871a77289f3b820, type: 3}
+  - {fileID: 241064325672397137, guid: d011e4b89d40cff4d906e0e5889c8aae, type: 3}
   pillarPrefab: {fileID: 9099359155624042919, guid: 079ece746ea94ca46a40316650e483e4, type: 3}
   largePillarPrefab: {fileID: 9099359155624042919, guid: 3678b5c5309fc0841a73a8873159f9a9, type: 3}
   floorPrefab: {fileID: 3323630791357088525, guid: 23f6dfb0ff1fb6e47aac5a13f541288e, type: 3}

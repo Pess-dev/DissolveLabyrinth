@@ -3,8 +3,10 @@ using UnityEngine.Events;
 
 public class GameSettingsManager : MonoBehaviour
 {
-    public float sensitivity = 1f;
-    public float audioVolume = 1f;
+    public float mainSensetivity = 3f;
+
+    float sensitivity = 1f;
+    float audioVolume = 1f;
 
     public UnityEvent<float> sensitivityChanged = new UnityEvent<float>();
     public UnityEvent<float> audioVolumeChanged = new UnityEvent<float>();
@@ -24,6 +26,7 @@ public class GameSettingsManager : MonoBehaviour
     {
         sensitivity = value;
         sensitivityChanged.Invoke(sensitivity);
+        InputManager.sensitivity = sensitivity*mainSensetivity;
     }
 
     public void SetAudioVolume(float value)

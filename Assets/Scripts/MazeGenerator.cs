@@ -10,6 +10,7 @@ public class MazeGenerator : MonoBehaviour
 
     public static MazeGenerator instance;
     public static UnityEvent mazeGenerated = new UnityEvent();
+    public static UnityEvent mazeGeneratedForSpawners = new UnityEvent();
 
     public GameObject wallPrefab;
     public List<GameObject> wallSpecialPrefabs;
@@ -45,6 +46,7 @@ public class MazeGenerator : MonoBehaviour
 
     void OnDestroy(){
         mazeGenerated.RemoveAllListeners();
+        mazeGeneratedForSpawners.RemoveAllListeners();
     }
 
     void Start()
@@ -170,6 +172,7 @@ public class MazeGenerator : MonoBehaviour
 
         SpawnPillars();
 
+        mazeGeneratedForSpawners.Invoke();
         mazeGenerated.Invoke();
     }
 

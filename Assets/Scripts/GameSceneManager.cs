@@ -27,6 +27,11 @@ public class GameSceneManager : MonoBehaviour
         SceneManager.LoadScene(index);
     }
 
+    public static void LoadCurrentLevel(){
+        int currentLevel = SceneManager.GetActiveScene().buildIndex;
+        LoadScene(currentLevel);
+    }
+
     public static void LoadMenu(){
         LoadScene(_menuNumber);
     }
