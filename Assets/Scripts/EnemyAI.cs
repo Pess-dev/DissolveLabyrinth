@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Events;
@@ -61,7 +62,7 @@ public class EnemyAI : MonoBehaviour{
         path = new NavMeshPath();
         stateTime = Random.value*idleTime;
         worldSyncPosition = GetComponent<WorldSyncPosition>();
-        worldSyncPosition.onSync.AddListener(RecalculatePath);
+        worldSyncPosition.onSync.AddListener(OnMovedBySync);
         //navMeshAgent = GetComponent<NavMeshAgent>();
         //target = PlayerController.instance.transform;
         
@@ -71,26 +72,32 @@ public class EnemyAI : MonoBehaviour{
     }
 
     void FixedUpdate(){
-        stateTime+=Time.fixedDeltaTime;
+        stateTime += Time.fixedDeltaTime;
         timerAbility += Time.fixedDeltaTime;
 
+       
+
         if (timerAbility>abilityTime && isActiveAbility && IsOnMesh()) {
-            movement.RemoveModifier("ability");    
-            isActiveAbility = false;
-            print("ability end");
+            DisableAbility();
         }
 
-        OnAny();
-        switch(aIState){
-            case AIState.Idle: OnIdle(); break;
-            case AIState.Patroling: OnPatroling(); break;
-            case AIState.Aggressive: OnAggressive(); break;
+        if (aIState!=AIState.Idle && path.status==NavMeshPathStatus.PathInvalid && !isActiveAbility){
+            EnableAbility(false);
+        }
+
+        if (!isActiveAbility){
+            OnAny();
+            switch(aIState){
+                case AIState.Idle: OnIdle(); break;
+                case AIState.Patroling: OnPatroling(); break;
+                case AIState.Aggressive: OnAggressive(); break;
+            }
         }
         Vector3 nextPosition = GetNextPosition();
         Vector3 direction = (nextPosition - transform.position).normalized;
         if (isActiveAbility){
             direction = abilityDirection;
-            //nextPosition = PlayerController.position;
+            nextPosition = transform.position+abilityDirection*minDistanceToTarget*2;
         }
         //print(Vector3.Distance(nextPosition, transform.position)+" "+path.status);
         if (Vector3.Distance(nextPosition, transform.position)>=minDistanceToTarget||isActiveAbility){
@@ -104,6 +111,7 @@ public class EnemyAI : MonoBehaviour{
     void OnAIStateChanged(AIState state){
         //if (state == AIState.Aggressive)print("bik");
         if (aIState == AIState.Aggressive) movement.RemoveModifier("aggressive");
+        aIState = state;
         stateTime = 0f;
         switch(state){
             case AIState.Idle: OnIdleFirst(); break;
@@ -113,13 +121,13 @@ public class EnemyAI : MonoBehaviour{
     }
 
     protected void OnIdleFirst(){
+        //if (isActiveAbility) return;
         SetDestination(transform.position);
     }
 
     protected void OnIdle(){
         if (stateTime>idleTime){
-            aIState = AIState.Patroling;
-            aIStateChanged.Invoke(aIState);
+            aIStateChanged.Invoke(AIState.Patroling);
             return;
         }
     }
@@ -130,8 +138,7 @@ public class EnemyAI : MonoBehaviour{
     }
     protected void OnPatroling(){
         if (stateTime>patrolingTime||Vector3.ProjectOnPlane(target-transform.position,Vector3.up).magnitude<=minDistanceToTarget){
-            aIState = AIState.Idle;
-            aIStateChanged.Invoke(aIState);
+            aIStateChanged.Invoke(AIState.Idle);
             return;
         }
     }
@@ -142,30 +149,40 @@ public class EnemyAI : MonoBehaviour{
 
     protected void OnAggressive(){
         if (DistanceToPlayer()>=forgiveRadius){
-            aIState = AIState.Idle;
-            aIStateChanged.Invoke(aIState);
+            aIStateChanged.Invoke(AIState.Idle);
             nearestAggresor = null;
             return;
         }
+
         float length = GetPathLength(path);
         if (timerAbility > abilityCooldown 
         && DistanceToPlayer() <= abilityRadius 
         && !isActiveAbility 
         && (length>DistanceToPlayer()*abilityFactor||path.status!=NavMeshPathStatus.PathComplete&&length<=abilityRadius)) {
-            print("ability start");
-            abilityDirection = (PlayerController.position-transform.position).normalized;
-            abilityActivated.Invoke();
-            movement.SetModifier("ability",abilitySpeedModifier);
-            isActiveAbility = true;
-            timerAbility=0;
+            EnableAbility(true);
         }
 
         target = GetPlayerPosition();
         SetDestination(target);
     }
 
-    public static float GetPathLength( NavMeshPath path )
-    {
+    void EnableAbility(bool aggressive){
+        if (aggressive )
+            abilityDirection = (PlayerController.position-transform.position).normalized;
+        else 
+            abilityDirection = transform.forward;
+        abilityActivated.Invoke();
+        movement.SetModifier("ability",abilitySpeedModifier);
+        isActiveAbility = true;
+        timerAbility=0;
+    }
+
+    void DisableAbility(){
+        movement.RemoveModifier("ability");    
+        isActiveAbility = false;
+    }
+
+    public static float GetPathLength(NavMeshPath path){
         float lng = 0.0f;
        
         if (path.status != NavMeshPathStatus.PathInvalid)
@@ -183,12 +200,10 @@ public class EnemyAI : MonoBehaviour{
         float distanceToPlayer = DistanceToPlayer(); 
         if (distanceToPlayer < aggressiveRadius && nearestAggresor != this && aIState != AIState.Aggressive){
             if (nearestAggresor == null || nearestAggresor.DistanceToPlayer()>distanceToPlayer){
-                aIState = AIState.Aggressive;
-                aIStateChanged.Invoke(aIState);
+                aIStateChanged.Invoke(AIState.Aggressive);
                 if (nearestAggresor!=null)
                 {
-                    nearestAggresor.aIState = AIState.Idle;
-                    nearestAggresor.aIStateChanged.Invoke(aIState);
+                    nearestAggresor.aIStateChanged.Invoke(AIState.Idle);
                 }
                 nearestAggresor = this;
                 return;
@@ -212,11 +227,17 @@ public class EnemyAI : MonoBehaviour{
     public int patrolAttemptCount = 10;          // Количество попыток найти подходящую точку
 
     bool IsOnMesh(){
+        NavMeshPath navMeshPath = new NavMeshPath();
         NavMeshHit hit;
         
-        float maxDistance = 0.5f;
+        float maxDistance = transform.position.y;
         
-        return NavMesh.SamplePosition(transform.position, out hit, maxDistance, NavMesh.AllAreas);;
+        bool result = NavMesh.SamplePosition(transform.position, out hit, maxDistance, NavMesh.AllAreas);
+        if (!result) return false;
+        
+        NavMesh.CalculatePath(transform.position, hit.position,NavMesh.AllAreas, navMeshPath);
+
+        return navMeshPath.status == NavMeshPathStatus.PathComplete;
     }
 
     // Новый метод для выбора патрульной точки
@@ -315,8 +336,9 @@ public class EnemyAI : MonoBehaviour{
             NavMesh.CalculatePath(transform.position, hit.position,NavMesh.AllAreas, path);
     }
 
-    protected void RecalculatePath(){
-        SetDestination(target);
+    protected void OnMovedBySync(){
+        if(aIState == AIState.Patroling)
+            OnPatrolingFirst();
     }
 
     protected Vector3 GetNextPosition(){
@@ -327,24 +349,33 @@ public class EnemyAI : MonoBehaviour{
         return path.corners[currentCorner];
     }
 
-    void OnDrawGizmosSelected() {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, aggressiveRadius);
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(transform.position, forgiveRadius);
-        Gizmos.color = Color.green;
-        Gizmos.DrawWireSphere(transform.position, minDistanceToTarget);
+    // void OnDrawGizmosSelected() {
+    //     Gizmos.color = Color.red;
+    //     Gizmos.DrawWireSphere(transform.position, aggressiveRadius);
+    //     Gizmos.color = Color.yellow;
+    //     Gizmos.DrawWireSphere(transform.position, forgiveRadius);
+    //     Gizmos.color = Color.green;
+    //     Gizmos.DrawWireSphere(transform.position, minDistanceToTarget);
 
-        Gizmos.color = Color.blue;
-        for (int i = 0; i < path.corners.Length-1; i++) {
-            Gizmos.DrawLine(path.corners[i], path.corners[i + 1]);
+    //     Gizmos.color = Color.blue;
+    //     for (int i = 0; i < path.corners.Length-1; i++) {
+    //         Gizmos.DrawLine(path.corners[i], path.corners[i + 1]);
             
-            Gizmos.DrawSphere(path.corners[i + 1], 0.1f);
-        }
-        Gizmos.DrawSphere(target, 0.5f);
-        Gizmos.color = Color.green;
-        Gizmos.DrawSphere(GetNextPosition(), 0.11f);
+    //         Gizmos.DrawSphere(path.corners[i + 1], 0.1f);
+    //     }
+    //     Gizmos.DrawSphere(target, 0.5f);
+    //     Gizmos.color = Color.green;
+    //     Gizmos.DrawSphere(GetNextPosition(), 0.11f);
 
-        print(aIState+" "+currentCorner);
-    }
+    //     print(aIState+" "+path.status+" "+isActiveAbility);
+    // }
+
+    // void OnDrawGizmos(){
+    //     Gizmos.color = Color.black;
+    //     if (path.status==NavMeshPathStatus.PathInvalid && !isActiveAbility && aIState!=AIState.Idle){
+    //         print("Я ЗАСТРЯЛ, прмгите Я ЗДЕСЬ: "+ transform.position);
+            
+    //         Gizmos.DrawSphere(transform.position, 2f);
+    //     }
+    // }
 }

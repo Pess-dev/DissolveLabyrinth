@@ -215,7 +215,7 @@ MonoBehaviour:
   idleTime: 5
   abilityCooldown: 5
   abilitySpeedModifier: 0.5
-  abilityTime: 1
+  abilityTime: 0.5
   abilityFactor: 1.5
   aIStateChanged:
     m_PersistentCalls:
