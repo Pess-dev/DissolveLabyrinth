@@ -16,6 +16,7 @@ public class WorldManager : MonoBehaviour
     public static Vector3 offset {get; private set;} = Vector3.zero;
 
     public static UnityEvent chunksCreated = new UnityEvent();
+    public static UnityEvent chunksCreatedForEnemies = new UnityEvent();
 
     void Awake(){
         offset = Vector3.zero;
@@ -26,6 +27,7 @@ public class WorldManager : MonoBehaviour
 
     void OnDestroy(){
         chunksCreated.RemoveAllListeners();
+        chunksCreatedForEnemies.RemoveAllListeners();
         chunkPool = new List<Transform>();
     }
 
@@ -43,6 +45,7 @@ public class WorldManager : MonoBehaviour
         
         ready = true;
         chunksCreated.Invoke();
+        chunksCreatedForEnemies.Invoke();
     }
 
     void Update()

@@ -157,7 +157,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7951a475d9c6d6145b0fff20aae6a008, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mainSensetivity: 1
+  mainSensetivity: 5
   sensitivityChanged:
     m_PersistentCalls:
       m_Calls:
@@ -212,7 +212,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b78f87357119d34886233935bd75885, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  duration: 0.05
+  duration: 0.3
   fogDensityDeactivated: 0.3
   fogDensityActivated: 0.3
 --- !u!1 &1467359007209217755
@@ -645,6 +645,36 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   loadingVolume: {fileID: 2616914109878753545}
   volumeChangeDuration: 1
+  onStartLoading:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 6511764082893708502}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  onEndLoading:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 6511764082893708502}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
 --- !u!1 &8887755310394981176
 GameObject:
   m_ObjectHideFlags: 0
@@ -1168,7 +1198,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5997012625142249086, guid: e1ebc79da5657b449850eaa7dec7ce0e, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5997012625142249086, guid: e1ebc79da5657b449850eaa7dec7ce0e, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1176,7 +1206,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7247169784853037081, guid: e1ebc79da5657b449850eaa7dec7ce0e, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7247169784853037081, guid: e1ebc79da5657b449850eaa7dec7ce0e, type: 3}
       propertyPath: m_LocalPosition.x

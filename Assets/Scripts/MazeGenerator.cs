@@ -171,7 +171,6 @@ public class MazeGenerator : MonoBehaviour
         }
 
         SpawnPillars();
-
         mazeGeneratedForSpawners.Invoke();
         mazeGenerated.Invoke();
     }

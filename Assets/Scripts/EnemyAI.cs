@@ -41,6 +41,7 @@ public class EnemyAI : MonoBehaviour{
 
     public enum AIState
     {
+        Disabled,
         Idle,
         Patroling,
         Aggressive
@@ -62,22 +63,38 @@ public class EnemyAI : MonoBehaviour{
 
     private Vector3 abilityDirection = Vector3.forward;
 
-    void Start(){
+    static bool playerKilled = false;
+
+    void Awake(){
+        playerKilled = false;
         movement = GetComponent<Movement>();    
         path = new NavMeshPath();
-        stateTimer = Random.value*idleTime;
         worldSyncPosition = GetComponent<WorldSyncPosition>();
         worldSyncPosition.onSync.AddListener(OnMovedBySync);
-        //navMeshAgent = GetComponent<NavMeshAgent>();
-        //target = PlayerController.instance.transform;
-        
+        WorldManager.chunksCreatedForEnemies.AddListener(InitializeAI);
         aIStateChanged.AddListener(OnAIStateChanged);
-
         avoidTransforms = GameObject.FindGameObjectsWithTag(avoidTag).Select(t => t.transform).ToList();
+        aIState = AIState.Disabled;
         DisableAbility();
     }
 
+    void Start(){
+        //navMeshAgent = GetComponent<NavMeshAgent>();
+        //target = PlayerController.instance.transform;
+        
+        
+       
+
+    }
+
+    void InitializeAI(){
+        aIStateChanged.Invoke(AIState.Idle);
+        //stateTimer = Random.value*idleTime;
+    }
+
     void FixedUpdate(){
+        if (aIState == AIState.Disabled)return;
+
         stateTimer += Time.fixedDeltaTime;
         timerAbility += Time.fixedDeltaTime;
 
@@ -173,9 +190,8 @@ public class EnemyAI : MonoBehaviour{
         SetDestination(target);
 
         if (distanceFromPlayer<=killRadius){
-            print("going to kill");
             killTimer+=Time.fixedDeltaTime;
-            if (isActiveAbility && killTimer>killAbilityTime||!isActiveAbility && killTimer>killTime){
+            if (((isActiveAbility || Ability.isActiveAbility) && killTimer>killAbilityTime)||!isActiveAbility&& killTimer>killTime){
                 KillPlayer();
             } 
         }
@@ -184,7 +200,9 @@ public class EnemyAI : MonoBehaviour{
     }
 
     void KillPlayer(){
-        GameManager.instance.OnKillcam(transform.position);
+        if (playerKilled) return;
+        playerKilled = true;
+        GameManager.instance.KillPlayerByEnemy(transform);
     }
 
     void EnableAbility(bool aggressive){

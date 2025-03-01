@@ -2,6 +2,7 @@ using System.Collections;
 using DG.Tweening;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
 
@@ -11,6 +12,9 @@ public class GameSceneManager : MonoBehaviour
     [SerializeField] float volumeChangeDuration = 0.1f;
 
     public static GameSceneManager instance;
+
+    public UnityEvent onStartLoading = new UnityEvent();
+    public UnityEvent onEndLoading = new UnityEvent();
 
     void Awake(){
         if (instance) return;
@@ -37,11 +41,14 @@ public class GameSceneManager : MonoBehaviour
     }
 
     IEnumerator LoadSceneAsync(int index){
+        onStartLoading.Invoke();
         EnableVolume();
         yield return new WaitForSecondsRealtime(volumeChangeDuration);
         
         SceneManager.LoadSceneAsync(index);
         DisableVolume();
+        
+        onEndLoading.Invoke();
     }
 
     public void LoadCurrentLevel(){

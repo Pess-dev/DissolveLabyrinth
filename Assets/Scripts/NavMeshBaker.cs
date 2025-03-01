@@ -7,11 +7,7 @@ public class NavMeshBaker : MonoBehaviour{
     void Awake()
     {
         navMeshSurface = GetComponent<NavMeshSurface>();
-    }
-
-    void Start(){
         WorldManager.chunksCreated.AddListener(navMeshSurface.BuildNavMesh);
         MazeGenerator.mazeGenerated.AddListener(()=>{transform.parent = transform.parent.GetChild(0);});
     }
-
 }

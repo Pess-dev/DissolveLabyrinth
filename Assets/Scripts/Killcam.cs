@@ -20,8 +20,13 @@ public class Killcam : MonoBehaviour
     {
         
     }
-    void StartKillcam(Vector3 killerPos){
+    void StartKillcam(Transform killer){
         //
+        DissolveController.instance.Deactivate();
+        Transform originalPlayerCamera = Camera.main.transform;
+        playerCamera.transform.localPosition = killer.InverseTransformPoint(originalPlayerCamera.transform.position);
+        playerCamera.transform.localRotation = Quaternion.LookRotation(killer.InverseTransformDirection(originalPlayerCamera.transform.forward), Vector3.up);
+    
         StartCoroutine(StartingKillCam());
     }
 

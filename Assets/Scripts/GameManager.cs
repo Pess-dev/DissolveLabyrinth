@@ -13,9 +13,9 @@ public class GameManager : MonoBehaviour
     public UnityEvent disableControls = new UnityEvent();
     public UnityEvent enableControls = new UnityEvent();
     public UnityEvent changedToLoading = new UnityEvent();
-    public UnityEvent<Vector3> changedToKillcam = new UnityEvent<Vector3>();
+    public UnityEvent<Transform> changedToKillcam = new UnityEvent<Transform>();
 
-    public static GameState gameState = GameState.Menu;
+    public GameState gameState = GameState.Menu;
 
     public bool controllable = true;
 
@@ -23,8 +23,7 @@ public class GameManager : MonoBehaviour
         Menu,
         Pause,
         Play,
-        Killcam,
-        Loading
+        Killcam
     }
 
     void Awake(){
@@ -67,8 +66,13 @@ public class GameManager : MonoBehaviour
     }
 
     public void Restart(){
-        GameSceneManager.instance.LoadCurrentLevel();
         OnPlay();
+        GameSceneManager.instance.LoadCurrentLevel();
+    }
+
+    public void KillPlayerByEnemy(Transform enemy){
+        if (gameState == GameState.Play)
+            StartKillCamera(enemy);
     }
 
     public void OnMenu(){
@@ -77,13 +81,17 @@ public class GameManager : MonoBehaviour
         SetCursorVisibility(true);
         changedToMenu.Invoke();
     }
+
     public void OnPlay(){
         enableControls.Invoke();
         gameState = GameState.Play;
        // Time.timeScale = 1f;
         SetCursorVisibility(false);
         changedToPlay.Invoke();
+
+        //GameSceneManager.instance.onEndLoading.RemoveListener(OnPlay);
     }
+
     public void OnPause(){
         if (gameState == GameState.Menu)
             return;
@@ -95,7 +103,9 @@ public class GameManager : MonoBehaviour
         changedToPause.Invoke();
     }
 
-    public void OnKillcam(Vector3 killerPosition){
+    public void StartKillCamera(Transform killerPosition){
+        print("СМЕРТЬ");
+        gameState = GameState.Killcam;
         disableControls.Invoke();
         changedToKillcam.Invoke(killerPosition);
     }

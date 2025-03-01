@@ -9,8 +9,14 @@ public class DissolveController : MonoBehaviour
     [SerializeField] public float fogDensityDeactivated = 0f;
     [SerializeField] public float fogDensityActivated = 0.5f;
 
-    void Start()
+    public static DissolveController instance;
+
+    void Awake()
     {
+        if (instance) return;
+        instance = this;
+
+
         Ability.activated.AddListener(Activate);
         Ability.deactivated.AddListener(Deactivate);
         Deactivate();

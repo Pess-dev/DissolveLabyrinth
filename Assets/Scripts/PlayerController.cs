@@ -16,17 +16,17 @@ public class PlayerController : MonoBehaviour
 
     void Awake(){
         instance = this;
-
-    }
-
-    void Start(){
         movement = GetComponent<Movement>();
         //cameraTransform = Camera.main.transform;
-        transform.position = Vector3.Project(transform.position, Vector3.up); 
-        if (GameManager.gameState == GameManager.GameState.Play)
+        print(GameManager.instance.gameState);
+        if (GameManager.instance.gameState == GameManager.GameState.Play)
             EnableControls();
         else 
             DisableControls();
+    }
+
+    void Start(){
+        
         GameManager.instance.disableControls.AddListener(DisableControls);
         GameManager.instance.enableControls.AddListener(EnableControls);
     }
@@ -50,10 +50,14 @@ public class PlayerController : MonoBehaviour
     }
 
     void DisableControls(){
+
+        print("UNcontrollable");
         isControllable = false;
     }
     
     void EnableControls(){
+        
+        print("controllable");
         isControllable = true;
     }
 }

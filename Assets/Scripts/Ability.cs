@@ -59,7 +59,7 @@ public class Ability : MonoBehaviour
         }
     }
 
-    void ActivateDissolve(){
+    public void ActivateDissolve(){
         isActiveAbility = true;
         pushOut = false;
         timer = 0f;
@@ -71,7 +71,7 @@ public class Ability : MonoBehaviour
         //
     }
 
-    void DeactivateDissolve(){
+    public void DeactivateDissolve(){
         isActiveAbility = false;
         pushOut = false;
         timer = 0f;

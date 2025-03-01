@@ -14,12 +14,13 @@ public class GameSettingsManager : MonoBehaviour
     void Start()
     {
         // Загрузка сохранённых настроек или установка значений по умолчанию
-        sensitivity = PlayerPrefs.GetFloat("Sensitivity", 1f);
+        sensitivity = PlayerPrefs.GetFloat("Sensitivity", 0.5f);
         audioVolume = PlayerPrefs.GetFloat("AudioVolume", 1f);
         
         // Уведомление других компонентов об изменениях
         sensitivityChanged.Invoke(sensitivity);
         audioVolumeChanged.Invoke(audioVolume);
+        Application.targetFrameRate = 60;
     }
 
     public void SetSensitivity(float value)
