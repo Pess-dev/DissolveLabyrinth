@@ -19,10 +19,6 @@ public class Ability : MonoBehaviour
     [SerializeField] float inWallSpeedModifier = 0.5f;
     [SerializeField] float abilityMinSpeed = 1f;
 
-    [SerializeField] float minCameraShake = 0.1f;
-    [SerializeField] float maxCameraShake = 1f;
-    [SerializeField] float cameraShakeRoughness = 1f;
-
     [SerializeField] float pushOutAcceleration = 5f;
     [SerializeField] LayerMask excludeDeactivated = 0;
     [SerializeField] LayerMask excludeActivated = 0;

@@ -8,7 +8,7 @@ public class Killcam : MonoBehaviour
     public float delayTime = 0.5f;
     [SerializeField] CinemachineCamera playerCamera;
     [SerializeField] CinemachineCamera killCamera;
-    [SerializeField] Animation animation;
+    [SerializeField] Animation _animation;
     CinemachineBrain brain;
     void Start()
     {
@@ -21,6 +21,7 @@ public class Killcam : MonoBehaviour
         
     }
     void StartKillcam(Vector3 killerPos){
+        //
         StartCoroutine(StartingKillCam());
     }
 
@@ -31,10 +32,11 @@ public class Killcam : MonoBehaviour
         killCamera.Priority = 3;
         
         yield return new WaitForSecondsRealtime(offsetAnimationTime); 
-        animation.Play();
+        _animation.Play();
     }
 
     public void EndKill(){
+        _animation.Stop();
         GameManager.instance.Restart();
     }
 }

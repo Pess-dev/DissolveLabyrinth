@@ -37,6 +37,7 @@ public class Movement : MonoBehaviour
     }
 
     public void SetLookDirection(Vector3 direction){
+        if (direction == Vector3.zero) direction =transform.forward;
         lookDirection = Vector3.ClampMagnitude(direction,1);
         lookDirection = Vector3.ProjectOnPlane(direction,Vector3.up).normalized;
     }

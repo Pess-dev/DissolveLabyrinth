@@ -46,12 +46,12 @@ public class GameManager : MonoBehaviour
     }
 
     public void StartPlay(){
-        GameSceneManager.LoadScene(1);
+        GameSceneManager.instance.LoadScene(1);
         OnPlay();
     }
 
     public void ExitToMenu(){
-        GameSceneManager.LoadMenu();
+        GameSceneManager.instance.LoadMenu();
         OnMenu();
     }
 
@@ -67,7 +67,7 @@ public class GameManager : MonoBehaviour
     }
 
     public void Restart(){
-        GameSceneManager.LoadCurrentLevel();
+        GameSceneManager.instance.LoadCurrentLevel();
         OnPlay();
     }
 

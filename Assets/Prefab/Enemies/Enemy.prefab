@@ -3540,7 +3540,7 @@ MonoBehaviour:
   aggressiveSpeedModifier: 2
   aggressiveRadius: 10
   forgiveRadius: 20
-  killRadius: 0.65
+  killRadius: 1
   killTime: 0.01
   killAbilityTime: 0.6
   abilityRadius: 3

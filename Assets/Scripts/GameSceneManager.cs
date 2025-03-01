@@ -1,18 +1,27 @@
+using System.Collections;
+using DG.Tweening;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
 
 public class GameSceneManager : MonoBehaviour
 {
-    [SerializeField] int menuNumber = 0;
-    [SerializeField] int levelCount = 3;
+    [SerializeField] Volume loadingVolume;
+    [SerializeField] float volumeChangeDuration = 0.1f;
 
-    static int _menuNumber = 0;
-    void Start(){
-        
+    public static GameSceneManager instance;
+
+    void Awake(){
+        if (instance) return;
+        instance = this;
     }
 
-    public static void LoadNextLevel(){
+    void Start(){
+        DisableVolume();
+    }
+
+    public void LoadNextLevel(){
         
         int currentLevel = SceneManager.GetActiveScene().buildIndex;
         currentLevel++;
@@ -23,16 +32,39 @@ public class GameSceneManager : MonoBehaviour
         LoadScene(currentLevel);
     }
 //
-    public static void LoadScene(int index){
-        SceneManager.LoadScene(index);
+    public void LoadScene(int index){
+        StartCoroutine(LoadSceneAsync(index));
     }
 
-    public static void LoadCurrentLevel(){
+    IEnumerator LoadSceneAsync(int index){
+        EnableVolume();
+        yield return new WaitForSecondsRealtime(volumeChangeDuration);
+        
+        SceneManager.LoadSceneAsync(index);
+        DisableVolume();
+    }
+
+    public void LoadCurrentLevel(){
         int currentLevel = SceneManager.GetActiveScene().buildIndex;
         LoadScene(currentLevel);
     }
 
-    public static void LoadMenu(){
-        LoadScene(_menuNumber);
+    public void LoadMenu(){
+        LoadScene(0);
+    }
+
+    void EnableVolume(){
+        DOTween.To(GetVolumeWeight,SetVolumeWeight,1,volumeChangeDuration); 
+    }
+
+    void DisableVolume(){
+        DOTween.To(GetVolumeWeight,SetVolumeWeight,0,volumeChangeDuration); 
+    }
+
+    float GetVolumeWeight(){
+        return loadingVolume.weight;
+    }
+    void SetVolumeWeight(float value){
+        loadingVolume.weight = value;
     }
 }

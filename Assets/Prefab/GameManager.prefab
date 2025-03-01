@@ -32,6 +32,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 4199392119199082019}
   - {fileID: 4535727421732012231}
   - {fileID: 2629476675236100273}
   - {fileID: 6193956564948117983}
@@ -131,6 +132,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
+  disableControls:
+    m_PersistentCalls:
+      m_Calls: []
+  enableControls:
+    m_PersistentCalls:
+      m_Calls: []
+  changedToLoading:
+    m_PersistentCalls:
+      m_Calls: []
+  changedToKillcam:
+    m_PersistentCalls:
+      m_Calls: []
   controllable: 1
 --- !u!114 &4025519781476769826
 MonoBehaviour:
@@ -148,7 +161,7 @@ MonoBehaviour:
   sensitivityChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1045922811892178543}
+      - m_Target: {fileID: 1463789842689061504}
         m_TargetAssemblyTypeName: UnityEngine.UI.Slider, UnityEngine.UI
         m_MethodName: SetValueWithoutNotify
         m_Mode: 0
@@ -163,7 +176,7 @@ MonoBehaviour:
   audioVolumeChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 664216907220213217}
+      - m_Target: {fileID: 1045922811892178543}
         m_TargetAssemblyTypeName: UnityEngine.UI.Slider, UnityEngine.UI
         m_MethodName: SetValueWithoutNotify
         m_Mode: 0
@@ -199,7 +212,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b78f87357119d34886233935bd75885, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  duration: 0.2
+  duration: 0.05
   fogDensityDeactivated: 0.3
   fogDensityActivated: 0.3
 --- !u!1 &1467359007209217755
@@ -537,6 +550,55 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!1 &7591813333184793882
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4199392119199082019}
+  - component: {fileID: 2616914109878753545}
+  m_Layer: 0
+  m_Name: LoadingVolume
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4199392119199082019
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7591813333184793882}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.7660077, y: 3.8849492, z: -0.10241798}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6368043486508854354}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2616914109878753545
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7591813333184793882}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 172515602e62fb746b5d573b38a5fe58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IsGlobal: 1
+  priority: 0
+  blendDistance: 0
+  weight: 0
+  sharedProfile: {fileID: 11400000, guid: ee224ad7157e25c44a5b43b12e35f35c, type: 2}
 --- !u!1 &8392713793356553631
 GameObject:
   m_ObjectHideFlags: 0
@@ -581,8 +643,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f0d023e7f993584ca5a45440c8f8ea4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  menuNumber: 0
-  levelCount: 1
+  loadingVolume: {fileID: 2616914109878753545}
+  volumeChangeDuration: 1
 --- !u!1 &8887755310394981176
 GameObject:
   m_ObjectHideFlags: 0
@@ -1563,6 +1625,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e1ebc79da5657b449850eaa7dec7ce0e, type: 3}
+--- !u!114 &1463789842689061504 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2483692178760284755, guid: e1ebc79da5657b449850eaa7dec7ce0e, type: 3}
+  m_PrefabInstance: {fileID: 3902287694484621523}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &5991692441781594627 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 7278223251991077584, guid: e1ebc79da5657b449850eaa7dec7ce0e, type: 3}
