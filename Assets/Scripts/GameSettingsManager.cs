@@ -18,9 +18,9 @@ public class GameSettingsManager : MonoBehaviour
         audioVolume = PlayerPrefs.GetFloat("AudioVolume", 1f);
         
         // Уведомление других компонентов об изменениях
-        sensitivityChanged.Invoke(sensitivity);
-        audioVolumeChanged.Invoke(audioVolume);
-        Application.targetFrameRate = 60;
+        SetAudioVolume(audioVolume);
+        SetSensitivity(sensitivity);
+        Application.targetFrameRate = 90;
     }
 
     public void SetSensitivity(float value)
@@ -34,11 +34,11 @@ public class GameSettingsManager : MonoBehaviour
     {
         audioVolume = value;
         audioVolumeChanged.Invoke(audioVolume);
+        AudioListener.volume = audioVolume;
     }
 
     void OnApplicationQuit()
     {
-        // Сохранение настроек при завершении приложения
         PlayerPrefs.SetFloat("Sensitivity", sensitivity);
         PlayerPrefs.SetFloat("AudioVolume", audioVolume);
         PlayerPrefs.Save();

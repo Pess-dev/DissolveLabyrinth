@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class SpiderLegsProceduralAnimation : MonoBehaviour
 {
@@ -20,6 +21,8 @@ public class SpiderLegsProceduralAnimation : MonoBehaviour
     int clusterCount;
 
     float timer = 0f;
+
+    public UnityEvent onLegMoved = new UnityEvent();
 
     private void Awake() {
         legTargetPositions = new List<Vector3>(legTargetTransforms.Count);
@@ -45,7 +48,7 @@ public class SpiderLegsProceduralAnimation : MonoBehaviour
             timer = 0;
             currentCluster++;
             if (currentCluster>=clusterCount) currentCluster = 0;
-            
+            onLegMoved.Invoke();
             for (int i = currentCluster; i < legTargetTransforms.Count; i+=cluster) {
                     Vector3 legPos = transform.TransformPoint(legTargetPositions[i]);
                     float legDistance = Vector3.SqrMagnitude(legTargetTransforms[i].position - legPos);

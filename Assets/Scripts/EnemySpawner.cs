@@ -6,6 +6,9 @@ public class EnemySpawner : MonoBehaviour
 {
     [SerializeField] float minDistanceFromPlayer = 20f;
     [SerializeField] List<SpawnObject> enemies = new List<SpawnObject>();
+
+    [SerializeField] bool withAbility = true;
+
     [Serializable]
     public class SpawnObject{
         [SerializeField]public GameObject prefab;
@@ -28,6 +31,8 @@ public class EnemySpawner : MonoBehaviour
                 GameObject enemyObject = Instantiate(enemy.prefab, 
                 spawners[num].transform.position, Quaternion.identity);
                 spawners.RemoveAt(num);
+                if (!withAbility)
+                    enemyObject.GetComponent<EnemyAI>().abilityRadius = 0;
             }
         }
     }

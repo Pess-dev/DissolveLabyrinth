@@ -29,7 +29,7 @@ public class GameSceneManager : MonoBehaviour
         
         int currentLevel = SceneManager.GetActiveScene().buildIndex;
         currentLevel++;
-        if(SceneManager.GetSceneByBuildIndex(currentLevel)==null)
+        if(currentLevel>=SceneManager.sceneCountInBuildSettings)
         {
             currentLevel = 0;
         }
@@ -37,11 +37,14 @@ public class GameSceneManager : MonoBehaviour
     }
 //
     public void LoadScene(int index){
+        if (index==0) GameManager.instance.OnMenu();
         StartCoroutine(LoadSceneAsync(index));
     }
 
     IEnumerator LoadSceneAsync(int index){
         onStartLoading.Invoke();
+        float audioVolume = AudioListener.volume;
+        DOTween.To(()=>AudioListener.volume,(x)=>AudioListener.volume = x,0,volumeChangeDuration);//AudioListener.volume = audioVolume;
         EnableVolume();
         yield return new WaitForSecondsRealtime(volumeChangeDuration);
         
@@ -49,6 +52,7 @@ public class GameSceneManager : MonoBehaviour
         DisableVolume();
         
         onEndLoading.Invoke();
+        DOTween.To(()=>AudioListener.volume,(x)=>AudioListener.volume = x,audioVolume,volumeChangeDuration);
     }
 
     public void LoadCurrentLevel(){

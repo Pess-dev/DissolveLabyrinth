@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class DissolveController : MonoBehaviour
 {
-    [SerializeField] float duration = 1f;
+    [SerializeField] public float duration = 1f;
     [SerializeField] public float fogDensityDeactivated = 0f;
     [SerializeField] public float fogDensityActivated = 0.5f;
 
@@ -15,10 +15,10 @@ public class DissolveController : MonoBehaviour
     {
         if (instance) return;
         instance = this;
-
-
-        Ability.activated.AddListener(Activate);
-        Ability.deactivated.AddListener(Deactivate);
+    }
+    void Start(){
+        //Ability.instance.activated.AddListener(Activate);
+        //Ability.instance.deactivated.AddListener(Deactivate);
         Deactivate();
     }
 

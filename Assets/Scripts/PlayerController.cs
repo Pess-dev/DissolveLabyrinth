@@ -18,15 +18,14 @@ public class PlayerController : MonoBehaviour
         instance = this;
         movement = GetComponent<Movement>();
         //cameraTransform = Camera.main.transform;
-        print(GameManager.instance.gameState);
+        //print(GameManager.instance.gameState);
+    }
+
+    void Start(){
         if (GameManager.instance.gameState == GameManager.GameState.Play)
             EnableControls();
         else 
             DisableControls();
-    }
-
-    void Start(){
-        
         GameManager.instance.disableControls.AddListener(DisableControls);
         GameManager.instance.enableControls.AddListener(EnableControls);
     }

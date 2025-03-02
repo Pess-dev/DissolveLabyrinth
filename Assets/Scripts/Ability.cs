@@ -1,5 +1,7 @@
 using System.Collections.Generic;
+using DG.Tweening;
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.Events;
 using UnityEngine.InputSystem.Utilities;
 
@@ -22,6 +24,8 @@ public class Ability : MonoBehaviour
     [SerializeField] float pushOutAcceleration = 5f;
     [SerializeField] LayerMask excludeDeactivated = 0;
     [SerializeField] LayerMask excludeActivated = 0;
+
+    [SerializeField] float audioVolumeModifier = 0.5f;
     
     CharacterController cc;
     Movement movement;
@@ -35,18 +39,28 @@ public class Ability : MonoBehaviour
 
     List<Collider> entered = new List<Collider>();
 
-    public static UnityEvent activated = new UnityEvent();
-    public static UnityEvent deactivated = new UnityEvent();
+    public UnityEvent activated = new UnityEvent();
+    public UnityEvent deactivated = new UnityEvent();
     
     public UnityEvent<float> staminaChanged = new UnityEvent<float>();
 
-    void Start()
-    {
+    public static Ability instance;
+
+    void Awake(){
+        instance = this;
         stamina = maxStamina;
         InputManager.ability.AddListener(ChangeDissolve);
         cc = GetComponent<CharacterController>();
         playerCollider = GetComponent<Collider>();
         movement = GetComponent<Movement>();
+    }
+
+    void Start()
+    {   
+        
+        activated.AddListener(DissolveController.instance.Activate);
+        deactivated.AddListener(DissolveController.instance.Deactivate);
+        
 
     }
 
@@ -60,6 +74,8 @@ public class Ability : MonoBehaviour
     }
 
     public void ActivateDissolve(){
+        float targetVolume = AudioListener.volume*audioVolumeModifier;
+        DOTween.To(()=>AudioListener.volume,(x) =>AudioListener.volume=x, targetVolume, DissolveController.instance.duration );
         isActiveAbility = true;
         pushOut = false;
         timer = 0f;
@@ -72,6 +88,9 @@ public class Ability : MonoBehaviour
     }
 
     public void DeactivateDissolve(){
+        
+        float targetVolume = AudioListener.volume/audioVolumeModifier;
+        DOTween.To(()=>AudioListener.volume,(x) =>AudioListener.volume=x, targetVolume, DissolveController.instance.duration );
         isActiveAbility = false;
         pushOut = false;
         timer = 0f;

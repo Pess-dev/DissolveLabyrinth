@@ -6,10 +6,13 @@ public class VFXDissolveController : MonoBehaviour
 {
     VisualEffect vfx;
     
-    void Start(){
+    void Awake(){
         vfx = GetComponent<VisualEffect>();
-        Ability.activated.AddListener(Activate);
-        Ability.deactivated.AddListener(Deactivate);
+        Deactivate();
+    }
+    void Start(){
+        Ability.instance.activated.AddListener(Activate);
+        Ability.instance.deactivated.AddListener(Deactivate);
         Deactivate();
     }
 

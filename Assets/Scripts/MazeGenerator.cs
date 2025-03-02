@@ -137,12 +137,18 @@ public class MazeGenerator : MonoBehaviour
         {
             for (int y = 1; y < mazeSize-1; y++)
             {
+
                 GameObject furniturePrefab;
                 Vector3 furniturePosition = new Vector3(
                         (x - mazeSize / 2f) * prefabSize,
                         0,
                         (y - mazeSize / 2f) * prefabSize
                 );
+
+                if (furniturePosition.magnitude<4f) continue;
+
+
+
                 if (grid[x, y].north && Random.value<=objectChance){
                     Vector3 offsetPosition = furniturePosition + new Vector3(0.5f,0,1f)*prefabSize;
                     furniturePrefab = furniturePrefabs[Random.Range(0, furniturePrefabs.Count)];

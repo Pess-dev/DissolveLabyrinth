@@ -19,6 +19,8 @@ public class GameManager : MonoBehaviour
 
     public bool controllable = true;
 
+    public bool invincible = false;
+
     public enum GameState{
         Menu,
         Pause,
@@ -71,7 +73,8 @@ public class GameManager : MonoBehaviour
     }
 
     public void KillPlayerByEnemy(Transform enemy){
-        if (gameState == GameState.Play)
+        if (invincible) return;
+        if (gameState == GameState.Play|| gameState == GameState.Pause)
             StartKillCamera(enemy);
     }
 
@@ -104,7 +107,7 @@ public class GameManager : MonoBehaviour
     }
 
     public void StartKillCamera(Transform killerPosition){
-        print("СМЕРТЬ");
+        //print("СМЕРТЬ");
         gameState = GameState.Killcam;
         disableControls.Invoke();
         changedToKillcam.Invoke(killerPosition);
