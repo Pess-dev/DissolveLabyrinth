@@ -24,6 +24,9 @@ public class InputManager : MonoBehaviour
     void Update()
     {
         moveDirection = ApplyCameraRotation(move);
+        if(Input.GetKeyDown(KeyCode.P)){
+            GameSceneManager.instance.LoadNextLevel();
+        }
     }
 
     Vector3 ApplyCameraRotation(Vector3 vector){

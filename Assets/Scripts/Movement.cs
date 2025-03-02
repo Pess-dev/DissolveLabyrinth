@@ -66,6 +66,11 @@ public class Movement : MonoBehaviour
         minimumSpeed = 0f;
     }
 
+    public float GetCurrentTargetSpeed(){
+        float modifier = 1;
+        if (modifiers.Count>0) modifier = modifiers.Values.Aggregate((acc, value) => acc * value);
+        return speed*modifier;
+    }
 
     public void AddFlatVelocity(Vector3 velocity){
         flatVelocity += Vector3.ProjectOnPlane(velocity, Vector3.up);

@@ -564,7 +564,6 @@ GameObject:
   m_Component:
   - component: {fileID: 769798759}
   - component: {fileID: 769798758}
-  - component: {fileID: 769798757}
   - component: {fileID: 769798756}
   m_Layer: 0
   m_Name: CameraREnderTexture
@@ -617,14 +616,6 @@ MonoBehaviour:
     m_MipBias: 0
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
---- !u!81 &769798757
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 769798755}
-  m_Enabled: 1
 --- !u!20 &769798758
 Camera:
   m_ObjectHideFlags: 0
@@ -684,13 +675,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 769798755}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: -0.10105626, w: 0.99488074}
-  m_LocalPosition: {x: 0, y: 2.342, z: -0.154}
+  m_LocalRotation: {x: 0.06388206, y: 0.0064889006, z: -0.10084786, w: 0.9928277}
+  m_LocalPosition: {x: 0, y: 2.904, z: 0.073}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -11.6}
+  m_LocalEulerAnglesHint: {x: 7.363, y: 0, z: -11.6}
 --- !u!1 &772699641
 GameObject:
   m_ObjectHideFlags: 0

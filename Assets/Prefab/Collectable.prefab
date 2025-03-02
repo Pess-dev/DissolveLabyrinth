@@ -615,7 +615,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   timeToCollect: 5
-  reverseSpeed: 0.5
+  reverseSpeed: 0.1
   distanceToPlayer: 2
   _animation: {fileID: 4603833468817313240}
   collected:

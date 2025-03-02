@@ -16,6 +16,8 @@ public class GameSettingsManager : MonoBehaviour
         // Загрузка сохранённых настроек или установка значений по умолчанию
         sensitivity = PlayerPrefs.GetFloat("Sensitivity", 0.5f);
         audioVolume = PlayerPrefs.GetFloat("AudioVolume", 1f);
+
+        GameSceneManager.instance.onEndLoading.AddListener(UpdateValues);
         
         // Уведомление других компонентов об изменениях
         SetAudioVolume(audioVolume);
@@ -35,6 +37,11 @@ public class GameSettingsManager : MonoBehaviour
         audioVolume = value;
         audioVolumeChanged.Invoke(audioVolume);
         AudioListener.volume = audioVolume;
+    }
+
+    void UpdateValues(){
+        AudioListener.volume = audioVolume;
+        InputManager.sensitivity = sensitivity*mainSensetivity;
     }
 
     void OnApplicationQuit()

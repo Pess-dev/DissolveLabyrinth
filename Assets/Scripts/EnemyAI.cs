@@ -29,7 +29,6 @@ public class EnemyAI : MonoBehaviour{
     public float abilityCooldown = 5f;
     public float abilitySpeedModifier = 0.2f;
     public float abilityTime = 3f;
-    public float abilityFactor = 2f;
 
 
     float timerAbility = 0;
@@ -106,7 +105,7 @@ public class EnemyAI : MonoBehaviour{
             DisableAbility();
         }
 
-        if (!isActiveAbility){
+        if (!isActiveAbility || aIState == AIState.Aggressive){
             OnAny();
             switch(aIState){
                 case AIState.Idle: OnIdle(); break;
@@ -182,7 +181,7 @@ public class EnemyAI : MonoBehaviour{
         if (timerAbility > abilityCooldown 
         && distanceFromPlayer <= abilityRadius 
         && !isActiveAbility 
-        && (length>distanceFromPlayer*abilityFactor||path.status!=NavMeshPathStatus.PathComplete&&length<=abilityRadius)) {
+        && (IsAbilityRequired()||path.status!=NavMeshPathStatus.PathComplete&&length<=abilityRadius)) {
             EnableAbility(true);
         }
 
@@ -191,12 +190,21 @@ public class EnemyAI : MonoBehaviour{
 
         if (distanceFromPlayer<=killRadius){
             killTimer+=Time.fixedDeltaTime;
-            if (((isActiveAbility || Ability.isActiveAbility) && killTimer>killAbilityTime)||!isActiveAbility&& killTimer>killTime){
+            if (((isActiveAbility || Ability.isActiveAbility) && killTimer > killAbilityTime)||!isActiveAbility&& killTimer>killTime){
                 KillPlayer();
             } 
         }
         else 
             killTimer = 0;
+    }
+
+    bool IsAbilityRequired(){
+        float length = GetPathLength(path);
+        float distanceToPlayer = DistanceToPlayer();
+        float speedNormal = movement.GetCurrentTargetSpeed();
+        float speedAbility = speedNormal*abilitySpeedModifier;
+
+        return length*speedNormal>distanceToPlayer*speedAbility;
     }
 
     void KillPlayer(){

@@ -67,6 +67,7 @@ public class Ability : MonoBehaviour
     void ChangeDissolve(bool value){
         if (!value) return;
         if (isActiveAbility) return;
+        if (GameManager.instance.gameState!=GameManager.GameState.Play) return;
 
         if (stamina >= staminaToStart && timer > cooldown){
             ActivateDissolve();

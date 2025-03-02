@@ -7,12 +7,15 @@ public class GameManager : MonoBehaviour
     public static GameManager instance;
 
     public UnityEvent changedToMenu = new UnityEvent();
+    public UnityEvent changedToEnd = new UnityEvent();
     public UnityEvent changedToPlay = new UnityEvent();
     public UnityEvent changedToPause = new UnityEvent();
     public UnityEvent disableControls = new UnityEvent();
     public UnityEvent enableControls = new UnityEvent();
     public UnityEvent changedToLoading = new UnityEvent();
     public UnityEvent<Transform> changedToKillcam = new UnityEvent<Transform>();
+
+    public int deathCount = 0;
 
     public GameState gameState = GameState.Menu;
 
@@ -24,7 +27,8 @@ public class GameManager : MonoBehaviour
         Menu,
         Pause,
         Play,
-        Killcam
+        Killcam,
+        End
     }
 
     void Awake(){
@@ -73,11 +77,13 @@ public class GameManager : MonoBehaviour
 
     public void KillPlayerByEnemy(Transform enemy){
         if (invincible) return;
+        
         if (gameState == GameState.Play|| gameState == GameState.Pause)
             StartKillCamera(enemy);
     }
 
     public void OnMenu(){
+        deathCount = 0;
         gameState = GameState.Menu;
         //Time.timeScale = 1f;
         SetCursorVisibility(true);
@@ -107,6 +113,7 @@ public class GameManager : MonoBehaviour
 
     public void StartKillCamera(Transform killerPosition){
         //print("СМЕРТЬ");
+        deathCount++;
         gameState = GameState.Killcam;
         disableControls.Invoke();
         changedToKillcam.Invoke(killerPosition);
@@ -114,6 +121,13 @@ public class GameManager : MonoBehaviour
 
     public void OnLoading(){
         changedToLoading.Invoke();
+    }
+
+    public void OnEnd(){
+        gameState = GameState.End;
+        //Time.timeScale = 1f;
+        SetCursorVisibility(true);
+        changedToEnd.Invoke();
     }
 
    
