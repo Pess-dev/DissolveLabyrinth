@@ -186,7 +186,7 @@ public class EnemyAI : MonoBehaviour{
         if (timerAbility > abilityCooldown 
         && distanceFromPlayer <= abilityRadius 
         && !isActiveAbility 
-        && (IsAbilityRequired()||path.status!=NavMeshPathStatus.PathComplete&&length<=abilityRadius)) {
+        && IsAbilityRequired()) {
             EnableAbility(true);
         }
 
@@ -208,6 +208,7 @@ public class EnemyAI : MonoBehaviour{
         float distanceToPlayer = DistanceToPlayer();
         float speedNormal = movement.GetCurrentTargetSpeed();
         float speedAbility = speedNormal*abilitySpeedModifier;
+        if (path.status!=NavMeshPathStatus.PathPartial&&length<=abilityRadius) return true;
 
         return length*speedNormal>distanceToPlayer*speedAbility;
     }

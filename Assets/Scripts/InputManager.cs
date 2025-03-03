@@ -30,6 +30,9 @@ public class InputManager : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.O)){
             GameSceneManager.instance.LoadCurrentLevel();
         }
+        if(Input.GetKeyDown(KeyCode.I)){
+            CollectableManager.instance.collectedAll.Invoke();
+        }
     }
 
     Vector3 ApplyCameraRotation(Vector3 vector){

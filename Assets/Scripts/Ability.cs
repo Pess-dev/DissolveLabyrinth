@@ -145,6 +145,8 @@ public class Ability : MonoBehaviour
                 bool isIn = nearest.bounds.Contains(transform.position);
                 bool isPenetrating = Physics.ComputePenetration(playerCollider,transform.position,transform.rotation,
                 nearest, nearest.transform.position, nearest.transform.rotation, out direction, out distance); 
+                direction+=transform.forward;
+                direction.Normalize();
                 //nearest.ClosestPoint();
                 //print(direction);
                 Vector2 randomInCircle = Random.insideUnitCircle;
