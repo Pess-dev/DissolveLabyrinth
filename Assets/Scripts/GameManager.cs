@@ -85,7 +85,7 @@ public class GameManager : MonoBehaviour
     public void OnMenu(){
         deathCount = 0;
         gameState = GameState.Menu;
-        //Time.timeScale = 1f;
+        Time.timeScale = 1f;
         SetCursorVisibility(true);
         changedToMenu.Invoke();
     }
@@ -93,7 +93,7 @@ public class GameManager : MonoBehaviour
     public void OnPlay(){
         enableControls.Invoke();
         gameState = GameState.Play;
-       // Time.timeScale = 1f;
+        Time.timeScale = 1f;
         SetCursorVisibility(false);
         changedToPlay.Invoke();
 
@@ -106,13 +106,14 @@ public class GameManager : MonoBehaviour
             
         disableControls.Invoke();
         gameState = GameState.Pause;
-        //Time.timeScale = 0f;
+        Time.timeScale = 0f;
         SetCursorVisibility(true);
         changedToPause.Invoke();
     }
 
     public void StartKillCamera(Transform killerPosition){
         //print("СМЕРТЬ");
+        Time.timeScale = 1f;
         deathCount++;
         gameState = GameState.Killcam;
         disableControls.Invoke();
@@ -125,7 +126,7 @@ public class GameManager : MonoBehaviour
 
     public void OnEnd(){
         gameState = GameState.End;
-        //Time.timeScale = 1f;
+        Time.timeScale = 1f;
         SetCursorVisibility(true);
         changedToEnd.Invoke();
     }
