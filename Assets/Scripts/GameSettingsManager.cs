@@ -5,17 +5,24 @@ public class GameSettingsManager : MonoBehaviour
 {
     public float mainSensetivity = 3f;
 
-    float sensitivity = 1f;
-    float audioVolume = 1f;
+    public float sensitivity {get; private set;} = 1f;
+    public float audioVolume {get; private set;} = 1f;
 
     public UnityEvent<float> sensitivityChanged = new UnityEvent<float>();
     public UnityEvent<float> audioVolumeChanged = new UnityEvent<float>();
+
+    public static GameSettingsManager instance;
+
+    void Awake(){
+        if (instance) return;
+        instance = this;
+    }
 
     void Start()
     {
         // Загрузка сохранённых настроек или установка значений по умолчанию
         sensitivity = PlayerPrefs.GetFloat("Sensitivity", 0.5f);
-        audioVolume = PlayerPrefs.GetFloat("AudioVolume", 1f);
+        audioVolume = PlayerPrefs.GetFloat("AudioVolume", 0.5f);
 
         GameSceneManager.instance.onEndLoading.AddListener(UpdateValues);
         
@@ -38,6 +45,11 @@ public class GameSettingsManager : MonoBehaviour
         audioVolumeChanged.Invoke(audioVolume);
         AudioListener.volume = audioVolume;
     }
+
+    void Update(){
+    }
+
+
 
     void UpdateValues(){
         AudioListener.volume = audioVolume;

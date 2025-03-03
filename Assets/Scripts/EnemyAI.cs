@@ -29,6 +29,7 @@ public class EnemyAI : MonoBehaviour{
     public float abilityCooldown = 5f;
     public float abilitySpeedModifier = 0.2f;
     public float abilityTime = 3f;
+    public float abilityMaxTime = 5f;
 
 
     float timerAbility = 0;
@@ -103,6 +104,10 @@ public class EnemyAI : MonoBehaviour{
 
         if (timerAbility>abilityTime && isActiveAbility && IsOnMesh()) {
             DisableAbility();
+        }
+        if (timerAbility>abilityMaxTime&&isActiveAbility && !IsOnMesh()){
+            Vector3 nearestDirection = NearestOnMesh(transform.position)-transform.position;
+            if (nearestDirection!=Vector3.zero) abilityDirection = nearestDirection.normalized;
         }
 
         if (!isActiveAbility || aIState == AIState.Aggressive){
@@ -288,6 +293,16 @@ public class EnemyAI : MonoBehaviour{
         NavMesh.CalculatePath(transform.position, hit.position,NavMesh.AllAreas, navMeshPath);
 
         return navMeshPath.status == NavMeshPathStatus.PathComplete;
+    }
+
+    Vector3 NearestOnMesh(Vector3 position){
+        float maxDistance = abilityRadius;
+        NavMeshHit hit;
+        
+        bool result = NavMesh.SamplePosition(transform.position, out hit, maxDistance, NavMesh.AllAreas);
+        if(!result) return position;
+        
+        return hit.position;
     }
 
     // Новый метод для выбора патрульной точки

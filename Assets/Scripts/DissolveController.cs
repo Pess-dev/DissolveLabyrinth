@@ -17,8 +17,6 @@ public class DissolveController : MonoBehaviour
         instance = this;
     }
     void Start(){
-        //Ability.instance.activated.AddListener(Activate);
-        //Ability.instance.deactivated.AddListener(Deactivate);
         Deactivate();
     }
 

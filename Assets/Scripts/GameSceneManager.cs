@@ -43,7 +43,6 @@ public class GameSceneManager : MonoBehaviour
 
     IEnumerator LoadSceneAsync(int index){
         onStartLoading.Invoke();
-        float audioVolume = AudioListener.volume;
         DOTween.To(()=>AudioListener.volume,(x)=>AudioListener.volume = x,0,volumeChangeDuration);//AudioListener.volume = audioVolume;
         EnableVolume();
         yield return new WaitForSecondsRealtime(volumeChangeDuration);
@@ -51,8 +50,8 @@ public class GameSceneManager : MonoBehaviour
         SceneManager.LoadSceneAsync(index);
         DisableVolume();
         
+        DOTween.To(()=>AudioListener.volume,(x)=>AudioListener.volume = x,GameSettingsManager.instance.audioVolume,volumeChangeDuration);
         onEndLoading.Invoke();
-        DOTween.To(()=>AudioListener.volume,(x)=>AudioListener.volume = x,audioVolume,volumeChangeDuration);
     }
 
     public void LoadCurrentLevel(){

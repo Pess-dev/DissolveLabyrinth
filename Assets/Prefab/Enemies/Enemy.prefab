@@ -3802,7 +3802,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   aggressiveSpeedModifier: 2
   aggressiveRadius: 10
-  forgiveRadius: 20
+  forgiveRadius: 30
   killRadius: 1
   killTime: 0.1
   killAbilityTime: 0.5
@@ -3814,6 +3814,7 @@ MonoBehaviour:
   abilityCooldown: 5
   abilitySpeedModifier: 0.5
   abilityTime: 0.5
+  abilityMaxTime: 3
   aIStateChanged:
     m_PersistentCalls:
       m_Calls: []

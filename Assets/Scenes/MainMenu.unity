@@ -1433,7 +1433,7 @@ Camera:
   m_BackGroundColor: {r: 0, g: 0, b: 0, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
-  m_FOVAxisMode: 0
+  m_FOVAxisMode: 1
   m_Iso: 200
   m_ShutterSpeed: 0.005
   m_Aperture: 16
@@ -4163,6 +4163,22 @@ PrefabInstance:
       propertyPath: m_Name
       value: GameManager
       objectReference: {fileID: 0}
+    - target: {fileID: 1397273682135230699, guid: 8a3cb8f1f119b4a4ba8a85e6175dd99d, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 243.80078
+      objectReference: {fileID: 0}
+    - target: {fileID: 1397273682135230699, guid: 8a3cb8f1f119b4a4ba8a85e6175dd99d, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -90.899994
+      objectReference: {fileID: 0}
+    - target: {fileID: 1694962107129551408, guid: 8a3cb8f1f119b4a4ba8a85e6175dd99d, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 149.30078
+      objectReference: {fileID: 0}
+    - target: {fileID: 2107804795166367031, guid: 8a3cb8f1f119b4a4ba8a85e6175dd99d, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 154.64062
+      objectReference: {fileID: 0}
     - target: {fileID: 6368043486508854354, guid: 8a3cb8f1f119b4a4ba8a85e6175dd99d, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -4202,6 +4218,10 @@ PrefabInstance:
     - target: {fileID: 6368043486508854354, guid: 8a3cb8f1f119b4a4ba8a85e6175dd99d, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7923983758880694687, guid: 8a3cb8f1f119b4a4ba8a85e6175dd99d, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 154.64062
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

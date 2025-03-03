@@ -874,7 +874,7 @@ PrefabInstance:
       objectReference: {fileID: 1932076065}
     - target: {fileID: 3238271583441269682, guid: 75ad869cbe6358a4ab479c02a3022963, type: 3}
       propertyPath: enemies.Array.data[0].count
-      value: 5
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 3473255511688260161, guid: 75ad869cbe6358a4ab479c02a3022963, type: 3}
       propertyPath: mazeSize

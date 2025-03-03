@@ -10,6 +10,7 @@ public class TextureChanger : MonoBehaviour
     void Start()
     {
         _renderer = GetComponent<Renderer>();
+        CollectableManager.instance.collectedAll.AddListener(ChangeTexture);
     }
 
     public void ChangeTexture(){

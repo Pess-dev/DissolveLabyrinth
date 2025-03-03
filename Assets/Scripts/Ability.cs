@@ -46,6 +46,8 @@ public class Ability : MonoBehaviour
 
     public static Ability instance;
 
+    float lastAudioVolume = 1;
+
     void Awake(){
         instance = this;
         stamina = maxStamina;
@@ -76,6 +78,7 @@ public class Ability : MonoBehaviour
 
     public void ActivateDissolve(){
         float targetVolume = AudioListener.volume*audioVolumeModifier;
+        lastAudioVolume = AudioListener.volume;
         DOTween.To(()=>AudioListener.volume,(x) =>AudioListener.volume=x, targetVolume, DissolveController.instance.duration );
         isActiveAbility = true;
         pushOut = false;
@@ -87,11 +90,13 @@ public class Ability : MonoBehaviour
         activated.Invoke();
         //
     }
+    void OnDestroy(){
+        float targetVolume = lastAudioVolume;
+        DOTween.To(()=>AudioListener.volume,(x) =>AudioListener.volume=x, GameSettingsManager.instance.audioVolume, DissolveController.instance.duration );
+    }
 
     public void DeactivateDissolve(){
-        
-        float targetVolume = AudioListener.volume/audioVolumeModifier;
-        DOTween.To(()=>AudioListener.volume,(x) =>AudioListener.volume=x, targetVolume, DissolveController.instance.duration );
+        DOTween.To(()=>AudioListener.volume,(x) =>AudioListener.volume=x, GameSettingsManager.instance.audioVolume, DissolveController.instance.duration );
         isActiveAbility = false;
         pushOut = false;
         timer = 0f;
