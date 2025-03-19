@@ -15,9 +15,9 @@ public class DissolveController : MonoBehaviour
     {
         if (instance) return;
         instance = this;
+        Deactivate();
     }
     void Start(){
-        Deactivate();
     }
 
     [ContextMenu("Activate Dissolve")]
@@ -45,8 +45,15 @@ public class DissolveController : MonoBehaviour
         DOTween.To(() => Shader.GetGlobalFloat("_value"), x => Shader.SetGlobalFloat("_value", x), 0, duration);
     }
 
-
+    public void DisableAll(){
+        Shader.SetGlobalVector("_MainParams", new Vector4(Shader.GetGlobalVector("_MainParams").x,0,0,0));
+        Shader.SetGlobalFloat("_value",0);
+    }
     public void OnDestroy(){
         Deactivate();
+    }
+
+    public void OnApplicationQuit(){
+        DisableAll();
     }
 }

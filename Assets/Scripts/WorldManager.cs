@@ -18,11 +18,19 @@ public class WorldManager : MonoBehaviour
     public static UnityEvent chunksCreated = new UnityEvent();
     public static UnityEvent chunksCreatedForEnemies = new UnityEvent();
 
+    [SerializeField] bool initializeOnStart = false;
+
     void Awake(){
         offset = Vector3.zero;
         instance = this;
         chunkSize = MazeGenerator.instance.prefabSize * MazeGenerator.instance.mazeSize;
-        MazeGenerator.mazeGenerated.AddListener(InitializeChunkPool);
+        
+        if (!initializeOnStart)
+            MazeGenerator.mazeGenerated.AddListener(InitializeChunkPool);
+    }
+    void Start(){
+        if (initializeOnStart)
+            InitializeChunkPool();
     }
 
     void OnDestroy(){

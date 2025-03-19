@@ -195,7 +195,9 @@ public class EnemyAI : MonoBehaviour{
 
         if (distanceFromPlayer<=killRadius){
             killTimer+=Time.fixedDeltaTime;
-            if (((isActiveAbility || Ability.isActiveAbility) && killTimer > killAbilityTime)||!isActiveAbility&& killTimer>killTime){
+            bool isAbilityKill = isActiveAbility || Ability.isActiveAbility; 
+            if ((isAbilityKill && killTimer > killAbilityTime)|| !isAbilityKill && killTimer>killTime){
+                //print($"Killed {killTimer} {killAbilityTime} {killTime}");
                 KillPlayer();
             } 
         }
@@ -208,7 +210,7 @@ public class EnemyAI : MonoBehaviour{
         float distanceToPlayer = DistanceToPlayer();
         float speedNormal = movement.GetCurrentTargetSpeed();
         float speedAbility = speedNormal*abilitySpeedModifier;
-        if (path.status!=NavMeshPathStatus.PathPartial&&length<=abilityRadius) return true;
+        if (path.status==NavMeshPathStatus.PathPartial&&length<=abilityRadius) return true;
 
         return length*speedNormal>distanceToPlayer*speedAbility;
     }

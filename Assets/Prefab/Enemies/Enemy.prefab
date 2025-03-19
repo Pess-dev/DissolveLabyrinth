@@ -3805,7 +3805,7 @@ MonoBehaviour:
   forgiveRadius: 30
   killRadius: 1
   killTime: 0.1
-  killAbilityTime: 0.5
+  killAbilityTime: 1
   abilityRadius: 10
   patrolingTime: 10
   minDistanceToTarget: 0.1

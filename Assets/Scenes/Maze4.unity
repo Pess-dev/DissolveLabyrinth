@@ -736,11 +736,11 @@ PrefabInstance:
     - target: {fileID: 1538075659636079615, guid: f53f29c2ea85e454c8cf265a3780d472, type: 3}
       propertyPath: texture
       value: 
-      objectReference: {fileID: 2800000, guid: bbafef81afe8e4a479c2e7ef05db4c9c, type: 3}
+      objectReference: {fileID: 2800000, guid: bd878f6199e9397418d957091ff38c8a, type: 3}
     - target: {fileID: 3999014962514043560, guid: f53f29c2ea85e454c8cf265a3780d472, type: 3}
       propertyPath: texture
       value: 
-      objectReference: {fileID: 2800000, guid: bbafef81afe8e4a479c2e7ef05db4c9c, type: 3}
+      objectReference: {fileID: 2800000, guid: bd878f6199e9397418d957091ff38c8a, type: 3}
     - target: {fileID: 4612993765235163835, guid: f53f29c2ea85e454c8cf265a3780d472, type: 3}
       propertyPath: m_LocalPosition.x
       value: 1.5

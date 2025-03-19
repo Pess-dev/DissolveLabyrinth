@@ -18,12 +18,15 @@ public class CollectableManager : MonoBehaviour
 
     public UnityEvent collectedAll = new UnityEvent();
     public UnityEvent<float> progressChanged = new UnityEvent<float>();
+
+    [SerializeField] bool spawnAfterGenerated = true;
     
     void Awake()
     {
         instance = this;
         collectedCount = 0;
-        MazeGenerator.mazeGeneratedForSpawners.AddListener(SpawnCollectables);
+        if (spawnAfterGenerated)
+            MazeGenerator.mazeGeneratedForSpawners.AddListener(SpawnCollectables);
     }
     void Start(){
         CheckCollectables();
